@@ -1,13 +1,13 @@
 <?php
 
 ########################################################################
-# Extension Manager/Repository config file for ext: "groupdelegation"
+# Extension Manager/Repository config file for ext "groupdelegation".
 #
-# Auto generated 26-01-2010 14:57
+# Auto generated 23-03-2010 14:52
 #
 # Manual updates:
-# Only the data in the array - anything else is removed by next write.
-# "version" and "dependencies" must not be touched!
+# Only the data in the array - everything else is removed by next
+# writing. "version" and "dependencies" must not be touched!
 ########################################################################
 
 $EM_CONF[$_EXTKEY] = array(
@@ -16,20 +16,20 @@ $EM_CONF[$_EXTKEY] = array(
 	'category' => 'module',
 	'author' => 'Sebastian Mueller, Bernhard Maier',
 	'author_email' => 'sebastian.mueller@abezet.de, maier@tum.de',
+	'author_company' => 'A.BE.ZET GmbH',
 	'shy' => '',
 	'dependencies' => 'cms',
 	'conflicts' => '',
 	'priority' => '',
 	'module' => 'mod1',
-	'state' => 'beta',
+	'state' => 'stable',
 	'internal' => '',
 	'uploadfolder' => 0,
 	'createDirs' => '',
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'author_company' => '',
-	'version' => '0.0.0',
+	'version' => '1.0.0',
 	'constraints' => array(
 		'depends' => array(
 			'cms' => '',
