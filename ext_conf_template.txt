@@ -1,0 +1,2 @@
+	# cat=basic/enable; type=boolean; label=Ignore organisation unit: if selected, sub admins are able to edit rights by adding/removing delegateable groups of every non TYPO3 admin be user and not just be user with a specific organisation unit
+ignoreOrganisationUnit = 1

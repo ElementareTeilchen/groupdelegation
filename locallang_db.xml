@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'groupdelegation'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="be_users.tx_groupdelegation_organisationunit">Organisations Unit:</label>
+			<label index="be_groups.tx_groupdelegation_organisationunit">Editable Organisation Units:</label>
+			<label index="be_groups.tx_groupdelegation_issubadmingroup">Backend Group is Sub Admin Group:</label>
+			<label index="be_groups.tx_groupdelegation_delegateable">Delegateable Groups:</label>
+			<label index="tx_groupdelegation_organisationunit">Organisation Unit:</label>
+			<label index="tx_groupdelegation_organisationunit.title">Title of Organisation Unit:</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="be_users.tx_groupdelegation_organisationunit">Organisationsbereich:</label>
+			<label index="be_groups.tx_groupdelegation_organisationunit">Veränderbare Organisationsbereiche:</label>
+			<label index="be_groups.tx_groupdelegation_issubadmingroup">Backend-Gruppe ist eine Sub-Admin-Gruppe:</label>
+			<label index="be_groups.tx_groupdelegation_delegateable">Veränderbare Gruppen</label>
+			<label index="tx_groupdelegation_organisationunit">Organisationsbereich:</label>
+			<label index="tx_groupdelegation_organisationunit.title">Bezeichnung des Organisationsbereichs:</label>
+		</languageKey>
+	</data>
+</T3locallang>
