@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;user_txgroupdelegationM1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="title">groupdelegation</label>
+			<label index="no_permission">You are not allowed to use this module, since you don't belong to any sub admin group.</label>
+			<label index="not_delegateable">Groups you can not remove:</label>
+			<label index="delegateable">Groups you can assign:</label>
+			<label index="no_delegateable_group">Error: There are no groups you may delegate to this user. There must be some wrong configuration, please contact your administrator.</label>
+			<label index="save_button">Delegate !</label>
+			<label index="edit_user">edit user:</label>
+			<label index="editable_user_overview">editable backend users</label>
+			<label index="uid">uid</label>
+			<label index="username">username</label>
+			<label index="name">name</label>
+			<label index="overview_not_delegateable">assigned backend-groups (not editable)</label>
+			<label index="overview_delegateable">assigned backend-groups (editable)</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="title">Gruppendelegation</label>
+			<label index="no_permission">Sie dürfen dieses Modul nicht benutzen, da Sie zu keiner Sub-Admin-Gruppe gehören.</label>
+			<label index="not_delegateable">Die folgenden Gruppen können Sie nicht entfernen:</label>
+			<label index="no_delegateable_group">Fehler: Es gibt keine zuzuweisenden Gruppen für diesen Benutzer. Es handelt sich um eine falsche Konfiguration, bitte kontaktieren Sie Ihren TYPO3-Administrator.</label>
+			<label index="save_button">Zuweisen !</label>
+			<label index="edit_user">Benutzer verwalten:</label>
+			<label index="editable_user_overview">Ihre verwaltbaren Backend-Benutzer</label>
+			<label index="uid">uid</label>
+			<label index="username">Benutzername</label>
+			<label index="name">Name</label>
+			<label index="overview_not_delegateable">zugewiesene Benutzergruppen (nicht veränderbar)</label>
+			<label index="overview_delegateable">zugewiesene Benutzergruppen (veränderbar)</label>
+		</languageKey>
+	</data>
+</T3locallang>
