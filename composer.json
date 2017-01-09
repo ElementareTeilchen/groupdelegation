@@ -1,0 +1,29 @@
+{
+  "name": "mschwemer/groupdelegation",
+  "type": "typo3-cms-extension",
+  "description": "Paste plain text (with MS Word and other Markup stripped off)",
+  "version": "2.0.0-dev",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "Sebastian Mueller",
+      "role": "Developer"
+    },
+    {
+      "name": "Marcus Schwemer",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "typo3/cms-core": "~8.4.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "TYPO3\\CMS\\GroupDelegation\\": "Classes/"
+    }
+  },
+  "replace": {
+    "groupdelegation": "self.version",
+    "typo3-ter/groupdelegation": "self.version"
+  }
+}
