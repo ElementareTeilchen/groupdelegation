@@ -1,7 +1,7 @@
 {
   "name": "mschwemer/groupdelegation",
   "type": "typo3-cms-extension",
-  "description": "Paste plain text (with MS Word and other Markup stripped off)",
+  "description": "Allows generating Sub-Admin be_user by groups which can handle access of other be_user by groups",
   "version": "2.0.0-dev",
   "license": "GPL-2.0+",
   "authors": [
@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "TYPO3\\CMS\\GroupDelegation\\": "Classes/"
+      "In2code\\Groupdelegation\\": "Classes"
     }
   },
   "replace": {

@@ -81,7 +81,7 @@ class  tx_groupdelegation {
 	 * @return	string		HTML modul content, edit user form including a select field with all delegateable groups and a string of not delegateable groups depending on the sub admin viewing it
 	 */
 	function renderEditUserForm() {
-		$userId = intval(t3lib_div::GPvar('user'));
+		$userId = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('user'));
 		$allowed = false;
 		foreach($this->editableUsers as $user) {
 			if($user['uid'] == $userId) {
@@ -167,7 +167,7 @@ class  tx_groupdelegation {
 	 * @return	void		
 	 */
 	function save() {
-		$userId = intval(t3lib_div::GPvar('user'));
+		$userId = intval(\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('user'));
 		$allowed = false;
 		foreach($this->editableUsers as $user) {
 			if($user['uid'] == $userId) {
@@ -199,7 +199,7 @@ class  tx_groupdelegation {
 
 			$notDelegateable = array_diff($groupIdsUser,$this->delegateableGroups);
 
-			$shouldBeDelegated = t3lib_div::GPvar('delegatedGroups');
+			$shouldBeDelegated = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('delegatedGroups');
 			$saveAllowed = array();
 
 			if(is_array($shouldBeDelegated)) {
@@ -269,11 +269,11 @@ class  tx_groupdelegation {
 			INNER JOIN be_users ON tx_groupdelegation_beusers_organisationunit_mm.uid_local = be_users.uid';
 			$where = 'be_groups.uid in ('.$this->groupsSqlString.')';
 			$where .= ' AND be_users.admin = 0';
-			$where .=  t3lib_BEfunc::BEenableFields('tx_groupdelegation_organisationunit') . t3lib_BEfunc::deleteClause('tx_groupdelegation_organisationunit');
-			$where .=  t3lib_BEfunc::BEenableFields('be_groups') . t3lib_BEfunc::deleteClause('be_groups');
+			$where .=  \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tx_groupdelegation_organisationunit') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('tx_groupdelegation_organisationunit');
+			$where .=  \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_groups') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_groups');
 			$groupBy = 'be_users.uid';
 		}
-		$where .=  t3lib_BEfunc::BEenableFields('be_users') . t3lib_BEfunc::deleteClause('be_users');
+		$where .=  \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_users') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_users');
 
 		
 		$orderBy = 'be_users.username';
@@ -307,7 +307,7 @@ class  tx_groupdelegation {
 			$table = 'be_groups
 				INNER JOIN tx_groupdelegation_subadmin_begroups_mm delg ON be_groups.uid = delg.uid_local';
 			$where = 'delg.uid_local IN (' . $this->groupsSqlString . ')';
-			$where .=  t3lib_BEfunc::BEenableFields('be_groups') . t3lib_BEfunc::deleteClause('be_groups');
+			$where .=  \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_groups') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_groups');
 
 		} else {
 			$select = 'delg.uid_foreign';
@@ -320,9 +320,9 @@ class  tx_groupdelegation {
 				INNER JOIN be_groups ON be_groups.uid = delg.uid_foreign';
 			$where = 'be_users.uid = ' . $userId;
 			$where .= ' AND delg.uid_local IN (' . $this->groupsSqlString . ')';
-			$where .= t3lib_BEfunc::BEenableFields('be_users') . t3lib_BEfunc::deleteClause('be_users');
-			$where .= t3lib_BEfunc::BEenableFields('tx_groupdelegation_organisationunit') . t3lib_BEfunc::deleteClause('tx_groupdelegation_organisationunit');
-			$enableClauseBeGroups = t3lib_BEfunc::BEenableFields('be_groups') . t3lib_BEfunc::deleteClause('be_groups');
+			$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_users') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_users');
+			$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tx_groupdelegation_organisationunit') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('tx_groupdelegation_organisationunit');
+			$enableClauseBeGroups = \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_groups') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_groups');
 			$where .= str_replace('be_groups','begroupssubadmin',$enableClauseBeGroups);
 			$where .= $enableClauseBeGroups;
 		}
@@ -365,7 +365,7 @@ class  tx_groupdelegation {
 		$select = 'uid, title';
 		$table = 'be_groups';
 		$where = 'uid IN (' . $allGroupIdsForUserString . ')';
-		$where .= t3lib_BEfunc::BEenableFields('be_groups') . t3lib_BEfunc::deleteClause('be_groups');
+		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_groups') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_groups');
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery (
 			$select,
 			$table,
