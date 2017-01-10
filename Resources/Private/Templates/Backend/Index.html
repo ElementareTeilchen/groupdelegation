@@ -2,5 +2,17 @@
 
 <f:section name="content">
 
-    <h1>Hello Worldf</h1>
+    <div id="groupdelegation-overlay">
+    <h1><f:translate key="tx_groupdelegation.title" /></h1>
+    <f:if condition="{isSubAdmin}==1">
+        <f:then>
+            <f:render partial="Userlist" arguments="{_all}"/>
+        </f:then>
+        <f:else>
+            <h2><f:translate key="tx_groupdelegation.isNoMemberOfSubAdminGroup_Title" /></h2>
+            <f:translate key="tx_groupdelegation.isNoMemberOfSubAdminGroup_Message" />
+        </f:else>
+    </f:if>
+
+    </div>
 </f:section>

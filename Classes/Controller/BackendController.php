@@ -25,7 +25,8 @@ namespace In2code\Groupdelegation\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use \TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use \In2code\Groupdelegation\Utility\GroupDelegationUtility;
 
 
 /**
@@ -34,13 +35,26 @@ use TYPO3\CMS\Core\Messaging\AbstractMessage;
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  *
  */
-class BackendController extends AbstractBackendController
+class BackendController extends ActionController
 {
+    var $groupsSqlString = '';
+    var $editableUsers = array();
+    var $ignoreOrganisationUnit = '0';
+    var $delegateableGroups = array();
+
+    protected $backendUser;
+
     /**
      * @return void
      */
     public function initializeAction()
     {
+        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['groupdelegation']);
+        if(!isset($extConf['ignoreOrganisationUnit'])) {
+            $this->ignoreOrganisationUnit = 1;
+        } else {
+            $this->ignoreOrganisationUnit = $extConf['ignoreOrganisationUnit'];
+        }
     }
 
     /**
@@ -48,6 +62,12 @@ class BackendController extends AbstractBackendController
      */
     public function indexAction()
     {
+        list($isSubAdmin, $groupIdList) = GroupDelegationUtility::isMemberOfSubAdminGroup();
 
+        if ($isSubAdmin) {
+            $this->view->assign('isSubAdmin', '1');
+        } else {
+            $this->view->assign('isSubAdmin', '0');
+        }
     }
 }
