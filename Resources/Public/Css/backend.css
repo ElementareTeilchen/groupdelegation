@@ -1,0 +1,40 @@
+#groupdelegation-overlay {
+    position: absolute;
+    width: 300px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 10px;
+}
+
+.groupdelegation-container {
+
+}
+
+
+.userlist-groupdelegation {border-collapse:collapse;width:100%;}
+.userlist-groupdelegation tr th {border-bottom:1px solid grey;font-size:11px;text-align: left;}
+.userlist-groupdelegation tr th,
+.userlist-groupdelegation tr td {padding:0px 5px;}
+table.userlist-groupdelegation tr.body-line:hover,
+table.userlist-groupdelegation tr.body-line:hover td {
+    background-color: #ebebeb;
+}
+
+.userlist-groupdelegation tr.body-line td {padding: 2px 5px;}
+.userlist-groupdelegation tr.body-line td.uid {padding-left:8px;}
+
+.userlist-groupdelegation .uid {width:30px;}
+.userlist-groupdelegation .username {width:155px;}
+.userlist-groupdelegation .name {width:99px;}
+.userlist-groupdelegation .icon {width:16px;}
+.userlist-groupdelegation .not-allowed {width:215px;/*color:#A30904;*/font-style: italic;}
+.userlist-groupdelegation .allowed {width:215px;}
+.edit-select-container,
+.edit-select-container select {width:250px;}
+.float-container {float:left; margin-right:50px;}
+span.current-user {font-size:14px;}
+span.current-user img {vertical-align:middle;}
+.edit-groups-not-allowed {/*color:#A30904; */margin-bottom:20px;font-style: italic;}
+.edit-groups-not-allowed h4 {/*color:#A30904;*/font-style: normal;}
+
