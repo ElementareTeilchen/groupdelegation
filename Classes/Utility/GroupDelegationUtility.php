@@ -17,7 +17,7 @@ class GroupDelegationUtility
      *
      * @return array
      */
-    public static function isMemberOfSubAdminGroup() :array
+    public static function isMemberOfSubAdminGroup(): array
     {
 
         $groupsSqlString = '';
@@ -40,12 +40,13 @@ class GroupDelegationUtility
     }
 
     /**
-     *
      * Returns the list of users, who can be edited by the current be user
      *
-     * @return	array
+     * @param $groupsSqlString
+     * @param int $ignoreOrganisationUnit
+     * @return array
      */
-    public static function getEditableUsers($groupsSqlString, $ignoreOrganisationUnit = 1) : array
+    public static function getEditableUsers(string $groupsSqlString, int $ignoreOrganisationUnit = 1): array
     {
 
         // make sure to start with an empty array if called twice
@@ -92,10 +93,12 @@ class GroupDelegationUtility
     /**
      * Sets instance variable delegateableGroups to an array of all delegateable groups from sub admin to $userId
      *
-     * @param	int		$userId: uid of backend user record
-     * @return	array
+     * @param $userId
+     * @param $groupsSqlString
+     * @param int $ignoreOrganisationUnit
+     * @return array
      */
-    public static function getDelegateableGroups($userId, $groupsSqlString, $ignoreOrganisationUnit = 1) : array
+    public static function getDelegateableGroups(int $userId, string $groupsSqlString, int $ignoreOrganisationUnit = 1): array
     {
 
         $userId = intval($userId);
@@ -148,10 +151,11 @@ class GroupDelegationUtility
     /**
      * Builds an array with a string of all delegateable and a string of all not delegateable groups
      *
-     * @param	string		$currentUserGroupsString: comma seperated list of all groups the user belongs to
-     * @return	array		array with a string for delegateable and not delegateable groups of current user
+     * @param $delegateableGroups
+     * @param string $currentUserGroupsString
+     * @return array
      */
-    public static function getSeparatedGroupsOfUser($delegateableGroups, $currentUserGroupsString = '') : array
+    public static function getSeparatedGroupsOfUser(array $delegateableGroups, string $currentUserGroupsString = ''): array
     {
 
         $groups = [];
@@ -191,9 +195,13 @@ class GroupDelegationUtility
     }
 
     /**
-     * Saves the assigned / removed groups in the edit form to the user. Includes checks if sub admin is allowed to do this changes.
+     * Saves the assigned / removed groups in the edit form to the user. Includes checks if sub admin is allowed to
+     * do this changes.
      *
-     * @return	void
+     * @param int $userId
+     * @param array $delegateableGroups
+     * @param array $shouldBeDelegated
+     * @return void
      */
     public static function saveUser(int $userId, array $delegateableGroups, array $shouldBeDelegated)
     {
@@ -234,10 +242,10 @@ class GroupDelegationUtility
 
 
     /**
-     * @param $userID
-     * @return void
+     * @param $userId
+     * @return array
      */
-    public static function getUserDetails($userId) : array
+    public static function getUserDetails(int $userId): array
     {
 
         $user = [];
@@ -258,7 +266,11 @@ class GroupDelegationUtility
         return $user;
     }
 
-    public static function getDelegateableGroupsOfUser($delegateableGroups) : array
+    /**
+     * @param $delegateableGroups
+     * @return array
+     */
+    public static function getDelegateableGroupsOfUser(array $delegateableGroups): array
     {
         $delegateableGroupsOfUser = [];
 
