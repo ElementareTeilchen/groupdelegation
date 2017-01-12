@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en"  target-language="de" datatype="plaintext" original="messages" product-name="hska_calendar">
+        <header/>
+        <body>
+            <trans-unit id="mlang_tabs_tab">
+                <source>Groupdelegation</source>
+                <target state="translated">Gruppendelegation</target>
+            </trans-unit>
+            <trans-unit id="mlang_labels_tabdescr">
+                <source>Module for delegating be_groups by non admin be_users.</source>
+                <target state="translated">Backend-Modul, das es nicht-Administratoren ermöglicht, anderen Backend-Benutzern Backend-Gruppen zuzuweisen.</target>
+            </trans-unit>
+            <trans-unit id="mlang_labels_tablabel">
+                <source>Delegating Backend Groups</source>
+                <target state="translated">Backend-Gruppen zuweisen (nicht-Administratoren)</target>
+            </trans-unit>
+
+            <trans-unit id="In2code.groupdelegation">
+                <source>Groupdelegation</source>
+                <target state="translated">Gruppendelegation</target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.title">
+                <source>Groupdelegation</source>
+                <target state="translated">Gruppendelegation</target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.isNoMemberOfSubAdminGroup_Title">
+                <source>Missing Permissions!</source>
+                <target state="translated">Fehlende Berechtigungen!</target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.isNoMemberOfSubAdminGroup_Message">
+                <source>You are not allowed to use this module, since you don't belong to any sub admin group.</source>
+                <target state="translated">Sie dürfen dieses Modul nicht benutzen, da Sie zu keiner Sub-Admin-Gruppe gehören.</target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.userlisting">
+                <source>Userlisting</source>
+                <target state="translated">Benutzerliste</target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.username">
+                <source>Username</source>
+                <target state="translated">Benutzernamen</target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.realname">
+                <source>Real Name</source>
+                <target state="translated">Name</target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.overview_delegateable">
+                <source>Delegateable groups (editable)</source>
+                <target state="translated">Zugewiesene Benutzergruppen (veränderbar)</target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.overview_not_delegateable">
+                <source>Not delegateable groups</source>
+                <target state="translated">Zugewiesene Benutzergruppen (nicht veränderbar)</target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.edituser">
+                <source>Edit user</source>
+                <target state="translated">Benutzer bearbeiten </target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.save">
+                <source>Save</source>
+                <target state="translated">Speichern</target>
+            </trans-unit>
+
+        </body>
+
+    </file>
+</xliff>
