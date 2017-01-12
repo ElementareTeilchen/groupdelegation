@@ -41,29 +41,6 @@ if(isset($extConf['ignoreOrganisationUnit']) && $extConf['ignoreOrganisationUnit
             'multible' => '0',
             'maxitems' => '200',
             'minitems' => '0',
-            'wizards' => Array(
-                '_PADDING' => 1,
-                '_VERTICAL' => 1,
-                'edit' => Array(
-                    'type' => 'popup',
-                    'title' => 'Edit organisation unit',
-                    'script' => 'wizard_edit.php',
-                    'icon' => 'edit2.gif',
-                    'popup_onlyOpenIfSelected' => 1,
-                    'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
-                ),
-                'add' => Array(
-                    'type' => 'script',
-                    'title' => 'Create new organisation unit',
-                    'icon' => 'add.gif',
-                    'params' => Array(
-                        'table'=>'tx_groupdelegation_organisationunit',
-                        'pid' => '0',
-                        'setValue' => 'prepend'
-                    ),
-                    'script' => 'wizard_add.php',
-                ),
-            )
         )
     );
 }
