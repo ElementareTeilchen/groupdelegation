@@ -13,7 +13,7 @@ return [
         'enablecolumns' => array(
             'disabled' => 'hidden',
         ),
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('groupdelegation') . 'Resources/Public/Icons/icon_tx_groupdelegation_organisationunit.gif',
+        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('groupdelegation') . 'Resources/Public/Images/icon_tx_groupdelegation_organisationunit.gif',
     ),
     "interface" => array(
         "showRecordFieldList" => "hidden,title"
