@@ -4,7 +4,7 @@ $tempColumns = array (
     'tx_groupdelegation_delegateable' => Array (
         'exclude' => 1,
         'l10n_mode' => 'exclude',
-        'label' => 'LLL:EXT:groupdelegation/locallang_db.xml:be_groups.tx_groupdelegation_delegateable',
+        'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_groups.tx_groupdelegation_delegateable',
         'config' => Array (
             'type' => 'select',
             'foreign_table' => 'be_groups',
@@ -19,7 +19,7 @@ $tempColumns = array (
     ),
     'tx_groupdelegation_issubadmingroup' => array (
         'exclude' => 1,
-        'label' => 'LLL:EXT:groupdelegation/locallang_db.xml:be_groups.tx_groupdelegation_issubadmingroup',
+        'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_groups.tx_groupdelegation_issubadmingroup',
         'config' => array (
             'type' => 'check',
         )
@@ -31,7 +31,7 @@ if(isset($extConf['ignoreOrganisationUnit']) && $extConf['ignoreOrganisationUnit
     $tempColumns['tx_groupdelegation_organisationunit'] = Array (
         'exclude' => 1,
         'l10n_mode' => 'exclude',
-        'label' => 'LLL:EXT:groupdelegation/locallang_db.xml:be_groups.tx_groupdelegation_organisationunit',
+        'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_groups.tx_groupdelegation_organisationunit',
         'config' => Array (
             'type' => 'select',
             'foreign_table' => 'tx_groupdelegation_organisationunit',

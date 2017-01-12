@@ -2,7 +2,7 @@
 
 return [
     "ctrl" => array(
-        'title' => 'LLL:EXT:groupdelegation/locallang_db.xml:tx_groupdelegation_organisationunit',
+        'title' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:tx_groupdelegation_organisationunit',
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -29,7 +29,7 @@ return [
         ),
         'title' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:groupdelegation/locallang_db.xml:tx_groupdelegation_organisationunit.title',
+            'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:tx_groupdelegation_organisationunit.title',
             'config' => array(
                 'type' => 'input',
                 'size' => '30',

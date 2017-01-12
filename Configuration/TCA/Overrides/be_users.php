@@ -9,7 +9,7 @@ call_user_func(function () {
         'tx_groupdelegation_organisationunit' => Array(
             'exclude' => 1,
             #'l10n_mode' => 'exclude',
-            'label' => 'LLL:EXT:groupdelegation/locallang_db.xml:be_users.tx_groupdelegation_organisationunit',
+            'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_users.tx_groupdelegation_organisationunit',
             'config' => Array(
                 'type' => 'select',
                 'foreign_table' => 'tx_groupdelegation_organisationunit',

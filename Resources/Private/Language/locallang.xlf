@@ -47,6 +47,26 @@
                 <source>Save</source>
             </trans-unit>
 
+            <trans-unit id="be_users.tx_groupdelegation_organisationunit">
+                <source>Organisational Unit</source>
+            </trans-unit>
+            <trans-unit id="be_groups.tx_groupdelegation_organisationunit">
+                <source>Editable Organisational Units</source>
+            </trans-unit>
+            <trans-unit id="be_groups.tx_groupdelegation_issubadmingroup">
+                <source>Backend Group is Sub Admin Group</source>
+            </trans-unit>
+            <trans-unit id="be_groups.tx_groupdelegation_delegateable">s
+                <source>Delegateable Groups</source>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation_organisationunit">
+                <source>Organisational Unit</source>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation_organisationunit.title">
+                <source>Title of Organisational Unit</source>
+            </trans-unit>
+
+
         </body>
 
     </file>
