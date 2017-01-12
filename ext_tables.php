@@ -11,7 +11,7 @@ if (TYPO3_MODE == 'BE') {
         'mod1',     // Name of the module
         '',         // Position of the module
         array(      // Allowed controller action combinations
-            'Backend' => 'index',
+            'Backend' => 'index, edit, save',
         ),
         array(
             'access' => 'user, group',
