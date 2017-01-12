@@ -16,8 +16,8 @@
 
                 <table>
                     <tr>
-                    <th>Änderbare Gruppen</th>
-                    <th>Nicht änderbare Gruppen</th>
+                    <th><f:translate key="tx_groupdelegation.overview_not_delegateable" /></th>
+                    <th><f:translate key="tx_groupdelegation.overview_delegateable" /></th>
                     </tr>
                     <tr>
                         <td>
@@ -36,7 +36,7 @@
                                     </f:for>
                                 </f:form.select>
                                 <br />
-                                <f:form.submit value="Save" />
+                                <f:form.submit value="{f:translate(key:'tx_groupdelegation.save')}" />
 
                             </f:form>
                         </td>
@@ -49,7 +49,7 @@
                     </tr>
                 </table>
 
-                In order to change the groups, please hold down the ctrl-key (Windows) or the cmd-key (mac).
+                In order to select or change the groups, please hold down the ctrl-key (Windows) or the cmd-key (mac).
 
             </f:then>
 

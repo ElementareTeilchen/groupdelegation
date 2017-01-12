@@ -28,6 +28,25 @@
             <trans-unit id="tx_groupdelegation.userlisting">
                 <source>Userlisting</source>
             </trans-unit>
+            <trans-unit id="tx_groupdelegation.username">
+                <source>Username</source>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.realname">
+                <source>Real Name</source>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.overview_delegateable">
+                <source>Delegateable groups</source>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.overview_not_delegateable">
+                <source>Not delegateable groups</source>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.edituser">
+                <source>Edit user</source>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.save">
+                <source>Save</source>
+            </trans-unit>
+
         </body>
 
     </file>
