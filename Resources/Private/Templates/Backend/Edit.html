@@ -1,0 +1,63 @@
+{namespace gd=In2code\Groupdelegation\ViewHelpers}
+
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <div id="groupdelegation-overlay">
+        <h1><f:translate key="tx_groupdelegation.title" /></h1>
+
+        <f:if condition="{isSubAdmin}==1">
+            <f:then>
+                <h2><f:translate key="tx_groupdelegation.edituser" /></h2>
+
+                <h3>Name: {user.realName}</h3>
+                <h4>Username: {user.username}</h4>
+
+                <table>
+                    <tr>
+                    <th>Änderbare Gruppen</th>
+                    <th>Nicht änderbare Gruppen</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <f:form action="save" controller="Backend" name="editUser">
+                                <f:form.hidden name="user" value="{user.uid}"/>
+                                <f:form.select name="groups" id="groups" title="groups" size="10" multiple="1">
+                                    <f:for each="{delegateableGroupsOfUser}" as="delgroup" key="delGroupId">
+                                        <f:if condition="{gd:InArray(needle:'{delGroupId}', haystack:'{usergroups}')} == true">
+                                            <f:then>
+                                                <f:form.select.option value="{delGroupId}" selected="true">{delgroup}</f:form.select.option>
+                                            </f:then>
+                                            <f:else>
+                                                <f:form.select.option value="{delGroupId}">{delgroup}</f:form.select.option>
+                                            </f:else>
+                                        </f:if>
+                                    </f:for>
+                                </f:form.select>
+                                <br />
+                                <f:form.submit value="Save" />
+
+                            </f:form>
+                        </td>
+                        <td>
+                            <f:for each="{groupsSeparated.hasNotDelegateable}" as="group" key="groupid">
+                                {group}<br />
+                            </f:for>
+
+                        </td>
+                    </tr>
+                </table>
+
+                In order to change the groups, please hold down the ctrl-key (Windows) or the cmd-key (mac).
+
+            </f:then>
+
+            <f:else>
+                <h2><f:translate key="tx_groupdelegation.isNoMemberOfSubAdminGroup_Title" /></h2>
+                <f:translate key="tx_groupdelegation.isNoMemberOfSubAdminGroup_Message" />
+            </f:else>
+        </f:if>
+    </div>
+
+</f:section>

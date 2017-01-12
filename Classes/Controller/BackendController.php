@@ -64,10 +64,109 @@ class BackendController extends ActionController
     {
         list($isSubAdmin, $groupIdList) = GroupDelegationUtility::isMemberOfSubAdminGroup();
 
+
         if ($isSubAdmin) {
-            $this->view->assign('isSubAdmin', '1');
+
+            $editableUsers = GroupDelegationUtility::getEditableUsers($groupIdList, $this->ignoreOrganisationUnit);
+            $usercount = 0;
+            foreach ($editableUsers as $user) {
+                $delegateableGoups = GroupDelegationUtility::getDelegateableGroups($user['uid'], $groupIdList, $this->ignoreOrganisationUnit);
+                $editableUsers[$usercount]['groups'] = GroupDelegationUtility::getSeparatedGroupsOfUser($delegateableGoups, $user['usergroup']);
+                $usercount++;
+            }
+
+            $this->view->assignMultiple([
+                'users'=> $editableUsers,
+                'isSubAdmin' => '1'
+            ]);
         } else {
             $this->view->assign('isSubAdmin', '0');
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function editAction()
+    {
+        if ($this->request->hasArgument('user')) {
+            $userId = intval($this->request->getArgument('user'));
+        } else {
+            $userId = 0;
+        }
+
+
+        list($isSubAdmin, $groupIdList) = GroupDelegationUtility::isMemberOfSubAdminGroup();
+
+        if ($isSubAdmin) {
+            $editableUsers = GroupDelegationUtility::getEditableUsers($groupIdList, $this->ignoreOrganisationUnit);
+            foreach ($editableUsers as $user) {
+                if($user['uid'] == $userId) {
+                    $allowed = true;
+                    break;
+                }
+            }
+
+            if ($allowed == true) {
+                $delegateableGroups = GroupDelegationUtility::getDelegateableGroups($userId, $groupIdList, $this->ignoreOrganisationUnit);
+
+                $user = GroupDelegationUtility::getUserDetails($userId);
+
+                $groupsSeparated = GroupDelegationUtility::getSeparatedGroupsOfUser($delegateableGroups, $user['usergroup']);
+
+                $userGroupsArray = explode(',',$user['usergroup']);
+
+                $delegateableGroupsOfUser = GroupDelegationUtility::getDelegateableGroupsOfUser($delegateableGroups);
+
+                $this->view->assignMultiple([
+                    'isSubAdmin' => '1',
+                    'user' => $user,
+                    'usergroups' => $userGroupsArray,
+                    'delegateableGroupsOfUser' => $delegateableGroupsOfUser,
+                    'groupsSeparated' => $groupsSeparated
+                ]);
+
+            }
+
+        } else {
+            $this->view->assign('isSubAdmin', '0');
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function saveAction()
+    {
+        $userId = intval($this->request->getArgument('user'));
+        $shouldBeDelegated = $this->request->getArgument('groups');
+
+        list($isSubAdmin, $groupIdList) = GroupDelegationUtility::isMemberOfSubAdminGroup();
+
+        if ($isSubAdmin) {
+            $editableUsers = GroupDelegationUtility::getEditableUsers($groupIdList, $this->ignoreOrganisationUnit);
+            foreach ($editableUsers as $user) {
+                if($user['uid'] == $userId) {
+                    $allowed = true;
+                    break;
+                }
+            }
+
+            if ($allowed == true) {
+
+
+                $delegateableGroups = GroupDelegationUtility::getDelegateableGroups(
+                    $userId,
+                    $groupIdList,
+                    $this->ignoreOrganisationUnit
+                );
+
+                \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($shouldBeDelegated);
+
+                GroupDelegationUtility::saveUser($userId, $delegateableGroups, $shouldBeDelegated);
+            }
+            $this->redirect('index');
+        }
+
     }
 }
