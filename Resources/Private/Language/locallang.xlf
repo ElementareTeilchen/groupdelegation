@@ -65,8 +65,9 @@
             <trans-unit id="tx_groupdelegation_organisationunit.title">
                 <source>Title of Organisational Unit</source>
             </trans-unit>
-
-
+            <trans-unit id="tx_groupdelegation.edit-hint">
+                <source>In order to select or change the groups, please hold down the ctrl-key (Windows) or the cmd-key (mac).</source>
+            </trans-unit>
         </body>
 
     </file>

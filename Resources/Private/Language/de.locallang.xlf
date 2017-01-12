@@ -84,14 +84,16 @@
             </trans-unit>
             <trans-unit id="tx_groupdelegation_organisationunit">
                 <source>Organisational Unit</source>
-                <target state="translated">Organisationsbereich/target>
+                <target state="translated">Organisationsbereich</target>
             </trans-unit>
             <trans-unit id="tx_groupdelegation_organisationunit.title">
                 <source>Title of Organisational Unit</source>
-                <target state="translated">Bezeichnung des Organisationsbereichs</target>
+                <target>Bezeichnung des Organisationsbereichs</target>
             </trans-unit>
-
-
+            <trans-unit id="tx_groupdelegation.edit-hint">
+                <source>In order to select or change the groups, please hold down the ctrl-key (Windows) or the cmd-key (mac).</source>
+                <target>Um die Gruppenzuordnung zu verändern, halten Sie bitte den Strg-Taste (Windows) oder die CMD-Taste (Mac) gedrückt.  </target>
+            </trans-unit>
         </body>
 
     </file>
