@@ -1,0 +1,29 @@
+{
+  "name": "mschwemer/groupdelegation",
+  "type": "typo3-cms-extension",
+  "description": "Allows generating Sub-Admin be_user by groups which can handle access of other be_user by groups",
+  "version": "2.0.0",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "Sebastian Mueller",
+      "role": "Developer"
+    },
+    {
+      "name": "Marcus Schwemer",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "typo3/cms-core": "~8.4.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "In2code\\Groupdelegation\\": "Classes"
+    }
+  },
+  "replace": {
+    "groupdelegation": "self.version",
+    "typo3-ter/groupdelegation": "self.version"
+  }
+}
