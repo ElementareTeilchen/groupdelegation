@@ -1,5 +1,5 @@
 {
-  "name": "mschwemer/groupdelegation",
+  "name": "in2code-de/groupdelegation",
   "type": "typo3-cms-extension",
   "description": "Allows generating Sub-Admin be_user by groups which can handle access of other be_user by groups",
   "version": "2.0.0",
