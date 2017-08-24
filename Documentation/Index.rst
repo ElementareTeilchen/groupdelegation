@@ -58,4 +58,5 @@ Groupdelegation
 	Introduction/Index
 	Administrator/Index
 	User/Index
-	Links
+	HowToContribute
+	Contact
