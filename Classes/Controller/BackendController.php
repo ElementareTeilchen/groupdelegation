@@ -161,8 +161,6 @@ class BackendController extends ActionController
                     $this->ignoreOrganisationUnit
                 );
 
-                \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($shouldBeDelegated);
-
                 GroupDelegationUtility::saveUser($userId, $delegateableGroups, $shouldBeDelegated);
             }
             $this->redirect('index');
