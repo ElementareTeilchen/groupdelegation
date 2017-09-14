@@ -13,22 +13,46 @@ Administrator Manual
 Installation
 ==============
 
-Import and install the extension using the Extension Manager.
+Via Extension Manager
+----------------------
 
-After installing you can set the option ignoreOrganisationUnit in the extension manager. If you change this setting
-later you may have some extra work with the groups and users.
+Go to the Extension Manager, choose "Get Extensions", search for "groupdelegation" and finally import and install the
+extension "groupdelegation".
 
-By default groupdelegation doesn't use organisation units (in the following referred to as OU). Using these means that
-sub admins can only edit be-users that belong to the OUs the sub admin is responsible for. You can assign every be-user
-to one or more OUs.
+Via composer
+-------------
 
-A be-user is a sub admin, if a sub admin group is assigned to him/her. Every sub admin group must also be assigned to
-a OU in order to be able to delegate groups to users of the same OU.
+Go to the directory with the composer configuration, which is usually project root. Then fire this command:
 
-If you set ignoreOrganisationUnit, sub admins are able to edit the rights of every non TYPO3 admin be-user by
+.. code ::
+
+   composer require in2code-de/groupdelegation
+
+In case you want to use the repository version, you need to add the following lines to the repository section of your
+projects composer.json.
+
+.. code ::
+
+   {
+      "type": "git",
+      "url": "https://github.com/in2code-de/groupdelegation"
+   }
+
+Extension Configuration
+=========================
+
+In the EM you can set the option "ignoreOrganisationUnit". If you selected it, subadmins are able to edit permissions
+by adding/removing delegateable groups of *every BE user*, who is not a TYPO3 admin. The organisation units will be
+ignored.
+
+If you change it later, you will have additional work with TYPO3 users and their groups.
+
+If you set ignoreOrganisationUnit, sub admins are able to edit the rights of every non TYPO3 admin BE-user by
 adding/removing their delegateable groups and not just be-users with a specific OU.
 
-Important: Using this extension you have to take more care about the organisation of the backend groups because
+*Important*
+
+Using this extension you have to take more care about the organisation of the backend groups because
 some unforseen things might be possible. Think you have a group that contains the rights to edit news (list-module,
 allowed tables, exclude fields). You also have two groups that allow access to different parts of the page tree (one
 for the marketing department and one for the human resources department). Imagine user xx contains the marketing and
@@ -37,8 +61,11 @@ to edit the marketing news. That might enable him also to edit the human resourc
 configured carefully – although the human resources sub admin didn't explicitly allow that.
 
 
-Preparation (Creating Sub Admin Groups)
-=======================================
+Configuration
+===============
+
+Setup Organisational Units (optional)
+---------------------------------------
 
 Using OUs
 ---------
