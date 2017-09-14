@@ -45,14 +45,15 @@ if(isset($extConf['ignoreOrganisationUnit']) && $extConf['ignoreOrganisationUnit
     );
 }
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('be_groups',$tempColumns,1);
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('be_groups','tx_groupdelegation_issubadmingroup;;;;1-1-1');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('be_groups', $tempColumns);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('be_groups', 'tx_groupdelegation_issubadmingroup;;;;1-1-1');
 
-$TCA['be_groups']['ctrl']['requestUpdate'] = 'tx_groupdelegation_issubadmingroup';
-$TCA['be_groups']['ctrl']['typeicon_column'] = 'tx_groupdelegation_issubadmingroup';
-$TCA['be_groups']['ctrl']['typeicons']['1'] = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('groupdelegation').'Resources/Public/Images/icon_be_sub_admin.gif';
-$TCA['be_groups']['types']['0']['subtype_value_field']= 'tx_groupdelegation_issubadmingroup';
-$TCA['be_groups']['types']['0']['subtypes_addlist']['1'] = 'tx_groupdelegation_delegateable,tx_groupdelegation_organisationunit';
-$TCA['be_groups']['types']['1']['subtype_value_field']='tx_groupdelegation_issubadmingroup';
-$TCA['be_groups']['types']['1']['subtypes_addlist']['1'] = 'tx_groupdelegation_delegateable,tx_groupdelegation_organisationunit';
+$GLOBALS['TCA']['be_groups']['ctrl']['requestUpdate'] = 'tx_groupdelegation_issubadmingroup';
+$GLOBALS['TCA']['be_groups']['ctrl']['typeicon_column'] = 'tx_groupdelegation_issubadmingroup';
+$GLOBALS['TCA']['be_groups']['ctrl']['typeicon_classes']['1'] = 'extensions-groupdelegation-subadmin-group';
+
+$GLOBALS['TCA']['be_groups']['types']['0']['subtype_value_field']= 'tx_groupdelegation_issubadmingroup';
+$GLOBALS['TCA']['be_groups']['types']['0']['subtypes_addlist']['1'] = 'tx_groupdelegation_delegateable,tx_groupdelegation_organisationunit';
+$GLOBALS['TCA']['be_groups']['types']['1']['subtype_value_field']='tx_groupdelegation_issubadmingroup';
+$GLOBALS['TCA']['be_groups']['types']['1']['subtypes_addlist']['1'] = 'tx_groupdelegation_delegateable,tx_groupdelegation_organisationunit';
 
