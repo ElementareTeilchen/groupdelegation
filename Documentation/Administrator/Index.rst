@@ -41,66 +41,80 @@ projects composer.json.
 Extension Configuration
 =========================
 
-In the EM you can set the option "ignoreOrganisationUnit". If you selected it, subadmins are able to edit permissions
+In the EM you can set the option "ignoreOrganisationUnit". If you select it, sub-admins are able to edit permissions
 by adding/removing delegateable groups of *every BE user*, who is not a TYPO3 admin. The organisation units will be
 ignored.
 
 If you change it later, you will have additional work with TYPO3 users and their groups.
 
-If you set ignoreOrganisationUnit, sub admins are able to edit the rights of every non TYPO3 admin BE-user by
+If you set ignoreOrganisationUnit, sub-admins are able to edit the rights of every non TYPO3 admin BE-user by
 adding/removing their delegateable groups and not just be-users with a specific OU.
 
-*Important*
+**Important**
 
-Using this extension you have to take more care about the organisation of the backend groups because
+Using this extension, you have to take more care about the organisation of the backend groups because
 some unforseen things might be possible. Think you have a group that contains the rights to edit news (list-module,
 allowed tables, exclude fields). You also have two groups that allow access to different parts of the page tree (one
 for the marketing department and one for the human resources department). Imagine user xx contains the marketing and
-the human resources group (managed by two different sub admins). Now the marketing sub admin wants to allow that user
+the human resources group (managed by two different sub-admins). Now the marketing sub-admin wants to allow that user
 to edit the marketing news. That might enable him also to edit the human resources news, if the mount points aren't
 configured carefully – although the human resources sub admin didn't explicitly allow that.
 
 
-Configuration
-===============
+Site Configuration
+=====================
 
-Setup Organisational Units (optional)
+Create Organisational Units (OU)
 ---------------------------------------
 
-Using OUs
----------
+This step is only necessary if the option in the EM "ignoreOrganisationUnit" is not set.
 
-First of all you should create your OUs on the root page of your site.
+OUs are set up on the root page of your TYPO3 instance (uid = 0). When creating an OU, you can only set a title for it.
+Nothing more is required or possible.
 
-Now if you create a be-user you are able to assign one or more of your OUs to the be-user.
+.. image:: /Images/create_ou.png
+   :width: 750px
 
-Now simply create a be-group. By checking “Backend Group is Sub Admin Group” in the tab “Extended” you specify this
-group to be a sub admin group. Select the delegateable groups of this sub admin and assign all OUs this sub admin is
-responsible for.
 
-Note: Sub admin groups must have access to the modules “User tools” and “User tools>groupdelegation”.
+Create Sub-Admin-Groups
+-------------------------
 
-Ignore OUs
-----------
+In order to make a BE user group a sub-admin group, you need to check the checkbox "Backend Group is Sub Admin Group"
+on the tab "extended".
 
-Just create a be-group and specify it as sub admin group. Select the delegateable groups of this sub admin group.
+If you do not ignore OUs, you will have two more settings available. If not, the OU setting is not visible.
 
-Note: Sub admin groups must have access to the modules “User tools” and “User tools>groupdelegation”.
+**1) Delegateable Groups**
+
+This defines the list of backend groups, which can be assigned by the sub-admin to the BE users of his OU.
+
+**2) Editable Organisational Units**
+
+This defines the OUs for which the sub-admin can change the backend permissions.
+
+.. image:: /Images/subadmin_group.png
+   :width: 750px
+
+Furthermore the Sub-admin group must have access permissions to the modules “User tools” and
+“User tools > Groupdelegation”.
+
+Make BE users to Sub-admins
+-----------------------------
+
+This is easy as to assign a BE user group to a BE user. Just go to the settings and assign a previously defined
+sub-admin group.
+
+Assign BE users to an OU
+--------------------------
+
+The last step is to assign BE users to OUs. This is done in the tab "Extended". All users, which are assigned to an OU,
+can now be granted additional permissions by a sub-admin.
+
+.. image:: /Images/beuser_assign-ou.png
+   :width: 750px
 
 Tipp
-~~~~~
+-------
 
-Using naming conventions in sub admin groups might prevent you from using a sub admin groups as delegateable group.
-
-Creating Sub Admins
--------------------
-
-Just assign the  sub admin group you created earlier to the be-users you want to be able to delegate groups.
-
-Configuration Reference
-=======================
-
-Extension Manager configuration
--------------------------------
-
-No further configuration, see administration
+You should really use naming conventions, when creating backend user groups. This might keep some troubles away. A good
+concept can be found at `typo3worx.eu <https://typo3worx.eu/2017/02/typo3-backend-user-management/>`_
