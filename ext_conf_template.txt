@@ -1,2 +1,4 @@
 	# cat=basic/enable; type=boolean; label=Ignore organisation unit: if selected, sub admins are able to edit rights by adding/removing delegateable groups of every non TYPO3 admin be user and not just be user with a specific organisation unit
 ignoreOrganisationUnit = 1
+    # cat=basic/enable; type=boolean; label=Editable Start and Stop time: if selected, sub admins are able to set and edit start and stop time of activateable be user
+editableStartStopTime = 0

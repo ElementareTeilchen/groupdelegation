@@ -1,4 +1,5 @@
 {namespace gd=In2code\Groupdelegation\ViewHelpers}
+{namespace be = TYPO3\CMS\Backend\ViewHelpers}
 
 <f:layout name="Backend" />
 
@@ -9,47 +10,39 @@
 
         <f:if condition="{isSubAdmin}==1">
             <f:then>
-                <h2><f:translate key="tx_groupdelegation.edituser" /></h2>
 
-                <h3>Name: {user.realName}</h3>
-                <h4>Username: {user.username}</h4>
+                <p><be:avatar backendUser="{user.uid}" showIcon="TRUE" /> {user.username} - {user.realName} [{user.uid}]</p>
 
-                <table>
-                    <tr>
-                        <th><f:translate key="tx_groupdelegation.overview_delegateable" /></th>
-                        <th><f:translate key="tx_groupdelegation.overview_not_delegateable" /></th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <f:form action="save" controller="Backend" name="editUser">
-                                <f:form.hidden name="user" value="{user.uid}"/>
-                                <f:form.select name="groups" id="groups" title="groups" size="10" multiple="1">
-                                    <f:for each="{delegateableGroupsOfUser}" as="delgroup" key="delGroupId">
-                                        <f:if condition="{gd:InArray(needle:'{delGroupId}', haystack:'{usergroups}')} == true">
-                                            <f:then>
-                                                <f:form.select.option value="{delGroupId}" selected="true">{delgroup}</f:form.select.option>
-                                            </f:then>
-                                            <f:else>
-                                                <f:form.select.option value="{delGroupId}">{delgroup}</f:form.select.option>
-                                            </f:else>
-                                        </f:if>
-                                    </f:for>
-                                </f:form.select>
-                                <br />
-                                <f:form.submit value="{f:translate(key:'tx_groupdelegation.save')}" />
+                <div class="groupdelegation-container">
+                        <f:form action="save" controller="Backend" name="editUser">
+                            <f:if condition="{canActivateUsers}">
+                                <h2><f:translate key="tx_groupdelegation.activationSettings" /></h2>
+                                <div>
+                                    <f:form.checkbox id="disable" name="disable" value="1" checked="{user.disable} == 1"></f:form.checkbox>
+                                    <label class="groupdelegation__disable" for="disable">
+                                        <f:translate key="LLL:EXT:lang/locallang_common.xlf:disable"/>
+                                    </label>
+                                </div>
+                                <div class="">
+                                <f:if condition="{editableStartStopTime}">
+                                    <f:translate key="LLL:EXT:lang/locallang_core.xlf:labels.starttime"/> <f:form.textfield name="starttime" type="date" value="{f:if(condition: user.starttime, then: user.starttime, else: null) -> f:format.date( format: 'Y-m-d' )}" placeholder="JJJJ-MM-DD" />
+                                    <f:translate key="LLL:EXT:lang/locallang_core.xlf:labels.endtime"/> <f:form.textfield name="endtime" type="date" value="{f:if(condition: user.endtime, then: user.endtime, else: null) -> f:format.date( format: 'Y-m-d' )}" placeholder="JJJJ-MM-DD" />
+                                </f:if>
+                                </div>
+                            </f:if>
 
-                            </f:form>
-                        </td>
-                        <td>
-                            <f:for each="{groupsSeparated.hasNotDelegateable}" as="group" key="groupid">
-                                {group}<br />
-                            </f:for>
+                            <f:form.hidden name="user" value="{user.uid}"/>
+                            <div class="groupdelegation__delegateable">
+                                <h2><f:translate key="be_groups.tx_groupdelegation_delegateable" /></h2>
+                                <f:for each="{delegateableGroupsOfUser}" as="delgroup" key="delGroupId">
+                                    <f:form.checkbox name="groups[]" id="groups-{delGroupId}" title="groups" value="{delGroupId}" checked="{gd:InArray(needle:'{delGroupId}', haystack:'{usergroups}')} == true" />
+                                    <label for="groups-{delGroupId}"> {delgroup} </label>
+                                </f:for>
+                            </div>
+                            <f:form.submit value="{f:translate(key:'tx_groupdelegation.save')}" />
 
-                        </td>
-                    </tr>
-                </table>
-
-                <f:translate key="tx_groupdelegation.edit-hint"/>
+                        </f:form>
+                </div>
 
             </f:then>
 

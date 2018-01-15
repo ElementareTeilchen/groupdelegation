@@ -12,6 +12,7 @@ CREATE TABLE be_groups (
 	tx_groupdelegation_delegateable int(11) DEFAULT '0' NOT NULL,
 	tx_groupdelegation_issubadmingroup tinyint(3) DEFAULT '0' NOT NULL,
 	tx_groupdelegation_organisationunit int(11) DEFAULT '0' NOT NULL,
+	tx_groupdelegation_canactivate tinyint(3) DEFAULT '0' NOT NULL,
 );
 
 #
