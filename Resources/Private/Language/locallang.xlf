@@ -46,6 +46,9 @@
             <trans-unit id="tx_groupdelegation.activationSettings">
                 <source>Activation Settings:</source>
             </trans-unit>
+            <trans-unit id="tx_groupdelegation.close">
+                <source>Close</source>
+            </trans-unit>
             <trans-unit id="tx_groupdelegation.save">
                 <source>Save</source>
             </trans-unit>

@@ -110,27 +110,51 @@
 
 
 /**
- * Save Button
+ * Save and back button
  */
 
-
+.groupdelegation-container .close-link,
 .groupdelegation-container input[type="submit"] {
-    border: 1px solid rgba(0,100,0,0.9);
     border-radius: 2px;
-    background-color: rgba(0,100,0,0.8);
     color: #fff;
     padding: 10px 16px 10px 30px;
-    float: right;
     font-weight: bold;
-    background-image: url("../Images/save-icon.svg");
     background-size: 1.5em;
     background-position-y: center;
     background-position-x: 9px;
     background-repeat: no-repeat;
 }
 
+.groupdelegation-container .close-link {
+    border: 1px solid rgba(142,144,148,1);
+    background-color: rgba(162,170,184,1);
+    background-image: url("../Images/close-icon.svg");
+    float: left;
+}
+
+.groupdelegation-container .close-link:hover,
+.groupdelegation-container .close-link:focus {
+    text-decoration: none;
+}
+
+.groupdelegation-container input[type="submit"] {
+    border: 1px solid rgba(0,100,0,0.9);
+    background-color: rgba(0,100,0,0.8);
+    background-image: url("../Images/save-icon.svg");
+    float: right;
+}
+
+
+.groupdelegation-container .close-link:before {
+
+}
+
 .groupdelegation-container input[type="submit"]:before {
 
+}
+
+.groupdelegation-container .close-link:hover {
+    background-color: rgba(142,144,148,1);
 }
 
 .groupdelegation-container input[type="submit"]:hover {
@@ -143,7 +167,7 @@
 .userlist-groupdelegation {border-collapse:collapse;width:100%;}
 .userlist-groupdelegation tr th {border-bottom:1px solid grey;font-size:11px;text-align: left;}
 .userlist-groupdelegation tr th,
-.userlist-groupdelegation tr td {padding:0px 5px;  vertical-align: top; }
+.userlist-groupdelegation tr td {padding:5px 15px;  vertical-align: middle; }
 table.userlist-groupdelegation tr.body-line:hover,
 table.userlist-groupdelegation tr.body-line:hover td {
     background-color: #ebebeb;

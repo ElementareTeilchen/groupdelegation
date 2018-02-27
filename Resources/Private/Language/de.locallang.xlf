@@ -65,6 +65,10 @@
                 <source>Activation Settings:</source>
                 <target>Aktivierungseinstellungen:</target>
             </trans-unit>
+            <trans-unit id="tx_groupdelegation.close">
+                <source>Close</source>
+                <target state="translated">Schließen</target>
+            </trans-unit>
             <trans-unit id="tx_groupdelegation.save">
                 <source>Save</source>
                 <target state="translated">Speichern</target>
