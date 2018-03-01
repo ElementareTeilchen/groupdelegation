@@ -12,6 +12,7 @@ call_user_func(function () {
             'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_users.tx_groupdelegation_organisationunit',
             'config' => Array(
                 'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_groupdelegation_organisationunit',
                 'foreign_table_where' => ' ORDER BY tx_groupdelegation_organisationunit.title',
                 'MM' => 'tx_groupdelegation_beusers_organisationunit_mm',
@@ -26,6 +27,6 @@ call_user_func(function () {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('be_users', $tempColumns, 1);
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
         'be_users',
-        'tx_groupdelegation_organisationunit;;;;1-1-1'
+        'tx_groupdelegation_organisationunit'
     );
 });
