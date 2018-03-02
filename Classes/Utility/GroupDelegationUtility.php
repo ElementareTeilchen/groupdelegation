@@ -12,22 +12,28 @@ class GroupDelegationUtility
 
     /**
      *
-     * Checks whether the current be user is part of a sub-admin-group and returns a list of
-     * all sub-admin-groups, which the BE user belongs to
+     * Checks whether
+     * - the current be user is part of a sub-admin-group,
+     * - is allowed to enable and disable users,
+     * and returns this info plus a list of all sub-admin-groups, which the BE user belongs to
      *
      * @return array
      */
-    public static function isMemberOfSubAdminGroup(): array
+    public static function getSubadminStatus(): array
     {
 
         $groupsSqlString = '';
         $groupId = [];
 
         $isSubAdmin = false;
+        $canActivateUsers = false;
 
         foreach ($GLOBALS['BE_USER']->userGroups as $singleGroup) {
             if($singleGroup['tx_groupdelegation_issubadmingroup']=== 1) {
                 $isSubAdmin = true;
+                if($singleGroup['tx_groupdelegation_canactivate']=== 1) {
+                    $canActivateUsers = true;
+                }
                 $groupId[] =  $singleGroup['uid'];
             }
         }
@@ -35,7 +41,7 @@ class GroupDelegationUtility
             $groupsSqlString = implode(',',$groupId);
         }
 
-        return array($isSubAdmin, $groupsSqlString);
+        return array($isSubAdmin, $canActivateUsers, $groupsSqlString);
 
     }
 
@@ -43,16 +49,17 @@ class GroupDelegationUtility
      * Returns the list of users, who can be edited by the current be user
      *
      * @param $groupsSqlString
-     * @param int $ignoreOrganisationUnit
+     * @param bool $ignoreOrganisationUnit
+     * @param bool $canActivateUsers
      * @return array
      */
-    public static function getEditableUsers(string $groupsSqlString, int $ignoreOrganisationUnit = 1): array
+    public static function getEditableUsers(string $groupsSqlString, bool $ignoreOrganisationUnit = true, bool $canActivateUsers): array
     {
 
         // make sure to start with an empty array if called twice
         $editableUsers = [];
 
-        if($ignoreOrganisationUnit == 1) {
+        if($ignoreOrganisationUnit) {
             $table = 'be_users';
             $where = 'be_users.admin = 0';
             $groupBy = '';
@@ -68,8 +75,10 @@ class GroupDelegationUtility
             $where .=  \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_groups') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_groups');
             $groupBy = 'be_users.uid';
         }
-        $where .=  \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_users') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_users');
-
+        if (!$canActivateUsers) {
+            $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_users');
+        }
+        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_users');
 
         $orderBy = 'be_users.username';
         $limit = '';
@@ -95,10 +104,11 @@ class GroupDelegationUtility
      *
      * @param $userId
      * @param $groupsSqlString
-     * @param int $ignoreOrganisationUnit
+     * @param bool $ignoreOrganisationUnit
+     * @param bool $canActivateUsers
      * @return array
      */
-    public static function getDelegateableGroups(int $userId, string $groupsSqlString, int $ignoreOrganisationUnit = 1): array
+    public static function getDelegateableGroups(int $userId, string $groupsSqlString, bool $ignoreOrganisationUnit = true, bool $canActivateUsers = false): array
     {
 
         $userId = intval($userId);
@@ -122,7 +132,11 @@ class GroupDelegationUtility
 				INNER JOIN be_groups ON be_groups.uid = delg.uid_foreign';
             $where = 'be_users.uid = ' . $userId;
             $where .= ' AND delg.uid_local IN (' . $groupsSqlString . ')';
-            $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_users') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_users');
+            if (!$canActivateUsers) {
+                $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_users');
+            }
+            $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_users');
+
             $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tx_groupdelegation_organisationunit') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('tx_groupdelegation_organisationunit');
             $enableClauseBeGroups = \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_groups') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_groups');
             $where .= str_replace('be_groups','begroupssubadmin',$enableClauseBeGroups);
@@ -168,7 +182,7 @@ class GroupDelegationUtility
 
         $notDelegateable = array_diff($currentUserGroupsArray,$delegateableGroups);
         $allGroupIdsForUser = array_merge($notDelegateable,$delegateableGroups);
-        $allGroupIdsForUserString = implode(',',$allGroupIdsForUser);
+        $allGroupIdsForUserString = implode(',', array_filter($allGroupIdsForUser));
 
         $select = 'uid, title';
         $table = 'be_groups';
@@ -201,9 +215,10 @@ class GroupDelegationUtility
      * @param int $userId
      * @param array $delegateableGroups
      * @param array $shouldBeDelegated
+     * @param array $enableFields
      * @return void
      */
-    public static function saveUser(int $userId, array $delegateableGroups, array $shouldBeDelegated)
+    public static function saveUser(int $userId, array $delegateableGroups, array $shouldBeDelegated, array $enableFields)
     {
         $user = GroupDelegationUtility::getUserDetails($userId);
 
@@ -231,6 +246,16 @@ class GroupDelegationUtility
             // tstamp to know when be_user record was last updated
             'tstamp' => time()
         );
+        if (isset($enableFields['disable'])) {
+            $fields_values['disable'] = $enableFields['disable'];
+        }
+        if (isset($enableFields['starttime'])) {
+            $fields_values['starttime'] = $enableFields['starttime'];
+        }
+        if (isset($enableFields['endtime'])) {
+            $fields_values['endtime'] = $enableFields['endtime'];
+        }
+
         // have to be done via exec_UPDATEquery since if sub admin is no TYPO3 admin the user has no permission for $tce->process_datamap();
         $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
             $table,
@@ -250,7 +275,7 @@ class GroupDelegationUtility
 
         $user = [];
 
-        $select = 'uid,username,usergroup,realName';
+        $select = 'uid,username,usergroup,realName,disable,starttime,endtime';
         $table = 'be_users';
         $where = 'uid = '.$userId;
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery (

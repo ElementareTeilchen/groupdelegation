@@ -35,13 +35,19 @@
                 <source>Real Name</source>
             </trans-unit>
             <trans-unit id="tx_groupdelegation.overview_delegateable">
-                <source>Delegateable groups</source>
+                <source>Assigned backend groups - delegateable</source>
             </trans-unit>
             <trans-unit id="tx_groupdelegation.overview_not_delegateable">
-                <source>Not delegateable groups</source>
+                <source>Assigned backend groups - not delegateable</source>
             </trans-unit>
             <trans-unit id="tx_groupdelegation.edituser">
                 <source>Edit user</source>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.activationSettings">
+                <source>Activation Settings:</source>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.close">
+                <source>Close</source>
             </trans-unit>
             <trans-unit id="tx_groupdelegation.save">
                 <source>Save</source>
@@ -56,17 +62,17 @@
             <trans-unit id="be_groups.tx_groupdelegation_issubadmingroup">
                 <source>Backend Group is Sub Admin Group</source>
             </trans-unit>
-            <trans-unit id="be_groups.tx_groupdelegation_delegateable">s
-                <source>Delegateable Groups</source>
+            <trans-unit id="be_groups.tx_groupdelegation_delegateable">
+                <source>Groups you can assign - check to assign:</source>
+            </trans-unit>
+            <trans-unit id="be_groups.tx_groupdelegation_canactivate">
+                <source>Sub Admin can activate Backend User</source>
             </trans-unit>
             <trans-unit id="tx_groupdelegation_organisationunit">
                 <source>Organisational Unit</source>
             </trans-unit>
             <trans-unit id="tx_groupdelegation_organisationunit.title">
                 <source>Title of Organisational Unit</source>
-            </trans-unit>
-            <trans-unit id="tx_groupdelegation.edit-hint">
-                <source>In order to select or change the groups, please hold down the ctrl-key (Windows) or the cmd-key (mac).</source>
             </trans-unit>
         </body>
 

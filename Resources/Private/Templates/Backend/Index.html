@@ -1,4 +1,5 @@
 {namespace core = TYPO3\CMS\Core\ViewHelpers}
+{namespace be = TYPO3\CMS\Backend\ViewHelpers}
 
 <f:layout name="Backend" />
 
@@ -13,31 +14,40 @@
             <h2><f:translate key="tx_groupdelegation.userlisting"/></h2>
 
             <table class="userlist-groupdelegation">
-                <tr class="head-line">
-                    <th class="icon">&nbsp;&nbsp;</th>
-                    <th class="name"><f:translate key="tx_groupdelegation.realname" /></th>
-                    <th class="username"><f:translate key="tx_groupdelegation.username" /> </th>
-                    <th class="allowed"><f:translate key="tx_groupdelegation.overview_delegateable" /></th>
-                    <th class="not-allowed"><f:translate key="tx_groupdelegation.overview_not_delegateable" /></th>
-                </tr>
-                <f:for each="{users}" as="user">
-                    <tr>
-                        <td class="icon"> <f:link.action action="edit" controller="Backend" arguments="{user: user.uid}">
-                            <core:icon identifier="actions-open" size="small" />
-
-                        </f:link.action></td> </td>
-                        <td class="name">{user.realName}</td>
-                        <td class="username">{user.username}</td>
-                        <td class="not-allowed">
-                            <f:for each="{user.groups.hasDelegateable}" as="group">
-                                {group}<br />
-                            </f:for></td>
-                        <td class="allowed">
-                            <f:for each="{user.groups.hasNotDelegateable}" as="group">
-                                {group}<br />
-                            </f:for></td>
+                <thead>
+                    <tr class="head-line">
+                        <th >&nbsp;&nbsp;</th>
+                        <th class="username"><f:translate key="tx_groupdelegation.username" /> </th>
+                        <th class="name"><f:translate key="tx_groupdelegation.realname" /></th>
+                        <th class="allowed"><f:translate key="tx_groupdelegation.overview_delegateable" /></th>
+                        <th class="not-allowed"><f:translate key="tx_groupdelegation.overview_not_delegateable" /></th>
                     </tr>
-                </f:for>
+                </thead>
+                <tbody>
+                    <f:for each="{users}" as="user">
+                        <tr>
+                            <td>
+                                <f:link.action action="edit" controller="Backend" arguments="{user: user.uid}">
+                                    <be:avatar backendUser="{user.uid}" showIcon="TRUE" />
+                                </f:link.action>
+                            </td>
+                            <td class="username">
+                                <f:link.action action="edit" controller="Backend" arguments="{user: user.uid}">{user.username}</f:link.action>
+                            </td>
+                            <td class="name">
+                                {user.realName}
+                            </td>
+                            <td class="not-allowed">
+                                <f:for each="{user.groups.hasDelegateable}" as="group">
+                                    {group}<br />
+                                </f:for></td>
+                            <td class="allowed">
+                                <f:for each="{user.groups.hasNotDelegateable}" as="group">
+                                    {group}<br />
+                                </f:for></td>
+                        </tr>
+                    </f:for>
+                </tbody>
             </table>
 
         </f:then>

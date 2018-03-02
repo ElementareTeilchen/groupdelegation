@@ -61,6 +61,14 @@
                 <source>Edit user</source>
                 <target state="translated">Benutzer bearbeiten</target>
             </trans-unit>
+            <trans-unit id="tx_groupdelegation.activationSettings">
+                <source>Activation Settings:</source>
+                <target>Aktivierungseinstellungen:</target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.close">
+                <source>Close</source>
+                <target state="translated">Schließen</target>
+            </trans-unit>
             <trans-unit id="tx_groupdelegation.save">
                 <source>Save</source>
                 <target state="translated">Speichern</target>
@@ -78,9 +86,13 @@
                 <source>Backend Group is Sub Admin Group</source>
                 <target state="translated">Backend-Gruppe ist eine Sub-Admin-Gruppe</target>
             </trans-unit>
-            <trans-unit id="be_groups.tx_groupdelegation_delegateable">s
-                <source>Delegateable Groups</source>
-                <target state="translated">Delegierbare Gruppen</target>
+            <trans-unit id="be_groups.tx_groupdelegation_delegateable">
+                <source>Groups you can assign - check to assign:</source>
+                <target state="translated">Delegierbare Gruppen - zum Zuweisen bitte anhaken:</target>
+            </trans-unit>
+            <trans-unit id="be_groups.tx_groupdelegation_canactivate">
+                <source>Sub Admin can activate Backend User</source>
+                <target state="translated">Sub-Admin kann Backend-Benutzer aktivieren</target>
             </trans-unit>
             <trans-unit id="tx_groupdelegation_organisationunit">
                 <source>Organisational Unit</source>
@@ -89,10 +101,6 @@
             <trans-unit id="tx_groupdelegation_organisationunit.title">
                 <source>Title of Organisational Unit</source>
                 <target>Bezeichnung des Organisationsbereichs</target>
-            </trans-unit>
-            <trans-unit id="tx_groupdelegation.edit-hint">
-                <source>In order to select or change the groups, please hold down the ctrl-key (Windows) or the cmd-key (mac).</source>
-                <target>Um die Gruppenzuordnung zu verändern, halten Sie bitte den Strg-Taste (Windows) oder die CMD-Taste (Mac) gedrückt.  </target>
             </trans-unit>
         </body>
 

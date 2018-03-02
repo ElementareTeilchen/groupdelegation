@@ -1,22 +1,173 @@
 #groupdelegation-overlay {
-    position: absolute;
-    width: 780px;
+    display: inline-block;
     padding: 20px;
     background: #fff;
 }
 
 .groupdelegation-container {
+    margin: 20px 0;
+}
+
+.groupdelegation-container > div {
+    float: left;
+}
+
+/**
+ * Disable
+ */
+
+.groupdelegation__disable {
+    padding: 10px;
+    background-color: #dfdfdf;
+}
+
+.groupdelegation__disable:hover {
+    cursor: pointer;
+    background-color: #cfcfcf;
+}
+
+.groupdelegation__disable:before {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    padding: 10px;
+    background-color: #fafafa;
+    border: 1px solid grey;
+    margin-right: 5px;
+}
+
+#disable {
+    visibility: hidden;
+    position: absolute;
+    width: 0;
+}
+
+#disable:checked ~ .groupdelegation__disable:before {
+    background-image: url("../Images/checked-icon.svg");
+    background-size: cover;
+}
+
+/**
+ * Date
+ */
+
+.groupdelegation-container input[type="date"] {
+    padding: 5px;
+    margin-top: 15px;
+    margin-right: 20px;
+    margin-left: 5px;
+}
+
+/**
+ * Delegateable Groups
+ */
+
+.groupdelegation__delegateable {
+    margin: 10px 0;
+}
+
+.groupdelegation__delegateable h2 {
+    margin-bottom: 15px;
+}
+
+.groupdelegation__delegateable label {
+    display: block;
+    padding: 10px;
+    background-color: #dfdfdf;
+    border: 2px solid #dfdfdf;
+}
+
+.groupdelegation__delegateable label:before {
+    content: '';
+    padding: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #fafafa;
+    border: 1px solid grey;
+    margin-right: 5px;
+}
+
+.groupdelegation__delegateable label:hover {
+    cursor: pointer;
+    background-color: #cfcfcf;
+    border: 2px solid #cfcfcf;
+}
+
+.groupdelegation__delegateable input {
+    position: absolute;
+    width: 0;
+    visibility: hidden;
+}
+
+.groupdelegation__delegateable input:checked + label {
+    border: 2px solid rgba(0,155,0,0.5);
+}
+
+.groupdelegation__delegateable input:checked + label:before {
+    background-image: url("../Images/checked-icon.svg");
+    background-size: cover;
+}
+
+
+/**
+ * Save and back button
+ */
+
+.groupdelegation-container .close-link,
+.groupdelegation-container input[type="submit"] {
+    border-radius: 2px;
+    color: #fff;
+    padding: 10px 16px 10px 30px;
+    font-weight: bold;
+    background-size: 1.5em;
+    background-position-y: center;
+    background-position-x: 9px;
+    background-repeat: no-repeat;
+}
+
+.groupdelegation-container .close-link {
+    border: 1px solid rgba(142,144,148,1);
+    background-color: rgba(162,170,184,1);
+    background-image: url("../Images/close-icon.svg");
+    float: left;
+}
+
+.groupdelegation-container .close-link:hover,
+.groupdelegation-container .close-link:focus {
+    text-decoration: none;
+}
+
+.groupdelegation-container input[type="submit"] {
+    border: 1px solid rgba(0,100,0,0.9);
+    background-color: rgba(0,100,0,0.8);
+    background-image: url("../Images/save-icon.svg");
+    float: right;
+}
+
+
+.groupdelegation-container .close-link:before {
 
 }
 
-#groupdelegation-overlay tr td,
-#groupdelegation-overlay tr th
-{vertical-align: top; padding:5px}
+.groupdelegation-container input[type="submit"]:before {
+
+}
+
+.groupdelegation-container .close-link:hover {
+    background-color: rgba(142,144,148,1);
+}
+
+.groupdelegation-container input[type="submit"]:hover {
+    background-color: rgba(0,100,0,1);
+}
+
+
+
 
 .userlist-groupdelegation {border-collapse:collapse;width:100%;}
 .userlist-groupdelegation tr th {border-bottom:1px solid grey;font-size:11px;text-align: left;}
 .userlist-groupdelegation tr th,
-.userlist-groupdelegation tr td {padding:0px 5px;  vertical-align: top; }
+.userlist-groupdelegation tr td {padding:5px 15px;  vertical-align: middle; }
 table.userlist-groupdelegation tr.body-line:hover,
 table.userlist-groupdelegation tr.body-line:hover td {
     background-color: #ebebeb;
@@ -25,12 +176,30 @@ table.userlist-groupdelegation tr.body-line:hover td {
 /* .userlist-groupdelegation tr.body-line td {padding: 2px 5px;}
 .userlist-groupdelegation tr.body-line td.uid {padding-left:8px;} */
 
-.userlist-groupdelegation .uid {width:30px;}
-.userlist-groupdelegation .username {width:200px;}
-.userlist-groupdelegation .name {width:200px;}
-.userlist-groupdelegation .icon {width:32px; border: none;}
+/*.userlist-groupdelegation .uid {width:30px;}*/
+/*.userlist-groupdelegation .username {width:200px;}*/
+/*.userlist-groupdelegation .name {width:200px;}*/
+/*.userlist-groupdelegation .icon {width:32px; border: none;}*/
 .userlist-groupdelegation .not-allowed {width:300px; font-style: italic;}
-.userlist-groupdelegation .allowed {width:300px;}
+/*.userlist-groupdelegation .allowed {width:300px;}*/
+
+.userlist-groupdelegation tr:nth-of-type(even) {
+    background-color: #efefef;
+}
+
+.userlist-groupdelegation .username a,
+.userlist-groupdelegation .name a {
+    padding: 10px;
+    background-color: #3070b3;
+    display: block;
+    color: #fff;
+    /*box-shadow: 0 4px 3px -3px rgba(0,0,0,0.33);*/
+}
+
+.userlist-groupdelegation .username a:hover,
+.userlist-groupdelegation .name a:hover {
+    background-color: #598dc2;
+}
 
 .edit-select-container,
 .edit-select-container select {width:250px;}
