@@ -51,9 +51,12 @@
  * Date
  */
 
+.groupdelegation__startstop {
+    padding: 10px;
+    background-color: #dfdfdf;
+}
 .groupdelegation-container input[type="date"] {
     padding: 5px;
-    margin-top: 15px;
     margin-right: 20px;
     margin-left: 5px;
 }
@@ -63,7 +66,7 @@
  */
 
 .groupdelegation__delegateable {
-    margin: 10px 0;
+    margin: 20px 0 10px 0;
 }
 
 .groupdelegation__delegateable h2 {

@@ -11,29 +11,29 @@
         <f:if condition="{isSubAdmin}==1">
             <f:then>
 
-                <p><be:avatar backendUser="{user.uid}" showIcon="TRUE" /> {user.username} - {user.realName} [{user.uid}]</p>
+                <h3><be:avatar backendUser="{user.uid}" showIcon="TRUE" /> {user.username} - {user.realName} [{user.uid}]</h3>
 
                 <div class="groupdelegation-container">
                         <f:form action="save" controller="Backend" name="editUser">
                             <f:if condition="{canActivateUsers}">
-                                <h2><f:translate key="tx_groupdelegation.activationSettings" /></h2>
+                                <h4><f:translate key="tx_groupdelegation.activationSettings" /></h4>
                                 <div>
                                     <f:form.checkbox id="disable" name="disable" value="1" checked="{user.disable} == 1"></f:form.checkbox>
                                     <label class="groupdelegation__disable" for="disable">
                                         <f:translate key="LLL:EXT:lang/locallang_common.xlf:disable"/>
                                     </label>
                                 </div>
-                                <div class="">
                                 <f:if condition="{editableStartStopTime}">
-                                    <f:translate key="LLL:EXT:lang/locallang_core.xlf:labels.starttime"/> <f:form.textfield name="starttime" type="date" value="{f:if(condition: user.starttime, then: user.starttime, else: null) -> f:format.date( format: 'Y-m-d' )}" placeholder="JJJJ-MM-DD" />
-                                    <f:translate key="LLL:EXT:lang/locallang_core.xlf:labels.endtime"/> <f:form.textfield name="endtime" type="date" value="{f:if(condition: user.endtime, then: user.endtime, else: null) -> f:format.date( format: 'Y-m-d' )}" placeholder="JJJJ-MM-DD" />
+                                  <div class="groupdelegation__startstop">
+                                        <label for="starttime"><f:translate key="LLL:EXT:lang/locallang_core.xlf:labels.starttime"/></label> <f:form.textfield name="starttime" type="date" value="{f:if(condition: user.starttime, then: user.starttime, else: null) -> f:format.date( format: 'Y-m-d' )}" placeholder="JJJJ-MM-DD" />
+                                        <label for="endtime"><f:translate key="LLL:EXT:lang/locallang_core.xlf:labels.endtime"/></label> <f:form.textfield name="endtime" type="date" value="{f:if(condition: user.endtime, then: user.endtime, else: null) -> f:format.date( format: 'Y-m-d' )}" placeholder="JJJJ-MM-DD" />
+                                  </div>
                                 </f:if>
-                                </div>
                             </f:if>
 
                             <f:form.hidden name="user" value="{user.uid}"/>
                             <div class="groupdelegation__delegateable">
-                                <h2><f:translate key="be_groups.tx_groupdelegation_delegateable" /></h2>
+                                <h4><f:translate key="be_groups.tx_groupdelegation_delegateable" /></h4>
                                 <f:for each="{delegateableGroupsOfUser}" as="delgroup" key="delGroupId">
                                     <f:form.checkbox name="groups[]" id="groups-{delGroupId}" title="groups" value="{delGroupId}" checked="{gd:InArray(needle:'{delGroupId}', haystack:'{usergroups}')} == true" />
                                     <label for="groups-{delGroupId}"> {delgroup} </label>
