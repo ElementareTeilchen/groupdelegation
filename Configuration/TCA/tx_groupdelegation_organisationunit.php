@@ -13,7 +13,7 @@ return [
         'enablecolumns' => array(
             'disabled' => 'hidden',
         ),
-        'iconfile' => 'EXT:groupdelegation/Resources/Public/Images/icon_tx_groupdelegation_organisationunit.gif',
+        'iconfile' => 'EXT:groupdelegation/Resources/Public/Images/sitemap.svg',
     ),
     "interface" => array(
         "showRecordFieldList" => "hidden,title"
