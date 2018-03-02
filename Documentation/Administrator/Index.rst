@@ -82,13 +82,17 @@ Create Sub-Admin-Groups
 In order to make a BE user group a sub-admin group, you need to check the checkbox "Backend Group is Sub Admin Group"
 on the tab "extended".
 
-If you do not ignore OUs, you will have two more settings available. If not, the OU setting is not visible.
+If you do not ignore OUs, you will have three more settings available. If not, the OU setting is not visible.
 
-**1) Delegateable Groups**
+**1) SubAdmin can activate backend user**
+
+If this checkbox is activated, a sub admin can also activate a be user and set start and stop time for the account.
+
+**2) Delegateable Groups**
 
 This defines the list of backend groups, which can be assigned by the sub-admin to the BE users of his OU.
 
-**2) Editable Organisational Units**
+**3) Editable Organisational Units**
 
 This defines the OUs for which the sub-admin can change the backend permissions.
 
