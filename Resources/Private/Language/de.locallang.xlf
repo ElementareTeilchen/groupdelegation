@@ -49,12 +49,12 @@
                 <source>Real Name</source>
                 <target state="translated">Name</target>
             </trans-unit>
-            <trans-unit id="tx_groupdelegation.overview_delegateable">
-                <source>Delegateable groups (editable)</source>
+            <trans-unit id="tx_groupdelegation.overview_delegatable">
+                <source>Delegatable groups (editable)</source>
                 <target state="translated">Zugewiesene Benutzergruppen (veränderbar)</target>
             </trans-unit>
-            <trans-unit id="tx_groupdelegation.overview_not_delegateable">
-                <source>Not delegateable groups</source>
+            <trans-unit id="tx_groupdelegation.overview_not_delegatable">
+                <source>Not delegatable groups</source>
                 <target state="translated">Zugewiesene Benutzergruppen (nicht veränderbar)</target>
             </trans-unit>
             <trans-unit id="tx_groupdelegation.edituser">
@@ -86,7 +86,7 @@
                 <source>Backend Group is Sub Admin Group</source>
                 <target state="translated">Backend-Gruppe ist eine Sub-Admin-Gruppe</target>
             </trans-unit>
-            <trans-unit id="be_groups.tx_groupdelegation_delegateable">
+            <trans-unit id="be_groups.tx_groupdelegation_delegatable">
                 <source>Groups you can assign - check to assign:</source>
                 <target state="translated">Delegierbare Gruppen - zum Zuweisen bitte anhaken:</target>
             </trans-unit>

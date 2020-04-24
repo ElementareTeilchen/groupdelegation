@@ -40,7 +40,7 @@ use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
  */
 class BackendController extends ActionController
 {
-    protected bool $ignoreOrganisationUnit = false;
+    protected bool $ignoreOrganisationUnit = true;
     protected bool $editableStartStopTime = false;
 
     /**
@@ -49,9 +49,7 @@ class BackendController extends ActionController
     public function initializeAction(): void
     {
         $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['groupdelegation'];
-        if(!isset($extConf['ignoreOrganisationUnit'])) {
-            $this->ignoreOrganisationUnit = true;
-        } else {
+        if(isset($extConf['ignoreOrganisationUnit'])) {
             $this->ignoreOrganisationUnit = boolval($extConf['ignoreOrganisationUnit']);
         }
         if (isset($extConf['editableStartStopTime'])) {
@@ -66,24 +64,22 @@ class BackendController extends ActionController
     {
         [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
-
         if ($isSubAdmin) {
-
             $editableUsers = GroupDelegationUtility::getEditableUsers($groupIdList, $this->ignoreOrganisationUnit, $canActivateUsers);
-            $usercount = 0;
+            $userCounter = 0;
             foreach ($editableUsers as $user) {
-                $delegateableGoups = GroupDelegationUtility::getDelegateableGroups(
+                $delegatableGroups = GroupDelegationUtility::getDelegatableGroups(
                     $user['uid'],
                     $groupIdList,
                     $this->ignoreOrganisationUnit,
                     $canActivateUsers
                 );
-                $editableUsers[$usercount]['groups'] =
+                $editableUsers[$userCounter]['groups'] =
                     GroupDelegationUtility::getSeparatedGroupsOfUser(
-                        $delegateableGoups,
+                        $delegatableGroups,
                         $user['usergroup']
                     );
-                $usercount++;
+                $userCounter++;
             }
 
             $this->view->assignMultiple([
@@ -110,6 +106,7 @@ class BackendController extends ActionController
 
         [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
+        $allowedToEditUser = false;
         if ($isSubAdmin) {
             $editableUsers =
                 GroupDelegationUtility::getEditableUsers(
@@ -119,13 +116,13 @@ class BackendController extends ActionController
                 );
             foreach ($editableUsers as $user) {
                 if($user['uid'] == $userId) {
-                    $allowed = true;
+                    $allowedToEditUser = true;
                     break;
                 }
             }
 
-            if ($allowed == true) {
-                $delegateableGroups =
+            if ($allowedToEditUser == true) {
+                $delegatableGroups =
                     GroupDelegationUtility::getDelegatableGroups(
                         $userId, $groupIdList, $this->ignoreOrganisationUnit, $canActivateUsers);
 
@@ -133,12 +130,12 @@ class BackendController extends ActionController
 
                 $groupsSeparated =
                     GroupDelegationUtility::getSeparatedGroupsOfUser(
-                        $delegateableGroups, $user['usergroup']
+                        $delegatableGroups, $user['usergroup']
                     );
 
                 $userGroupsArray = explode(',',$user['usergroup']);
 
-                $delegateableGroupsOfUser = GroupDelegationUtility::getDelegateableGroupsOfUser($delegateableGroups);
+                $delegatableGroupsOfUser = GroupDelegationUtility::getDelegatableGroupsOfUser($delegatableGroups);
 
                 $this->view->assignMultiple([
                     'isSubAdmin' => '1',
@@ -146,7 +143,7 @@ class BackendController extends ActionController
                     'editableStartStopTime' => $this->editableStartStopTime,
                     'user' => $user,
                     'usergroups' => $userGroupsArray,
-                    'delegateableGroupsOfUser' => $delegateableGroupsOfUser,
+                    'delegatableGroupsOfUser' => $delegatableGroupsOfUser,
                     'groupsSeparated' => $groupsSeparated
                 ]);
 
@@ -192,14 +189,14 @@ class BackendController extends ActionController
                     }
                 }
 
-                $delegateableGroups = GroupDelegationUtility::getDelegateableGroups(
+                $delegatableGroups = GroupDelegationUtility::getDelegatableGroups(
                     $userId,
                     $groupIdList,
                     $this->ignoreOrganisationUnit,
                     $canActivateUsers
                 );
 
-                GroupDelegationUtility::saveUser($userId, $delegateableGroups, $shouldBeDelegated, $enableFields);
+                GroupDelegationUtility::saveUser($userId, $delegatableGroups, $shouldBeDelegated, $enableFields);
             }
             // @extensionScannerIgnoreLine
             $this->redirect('index');

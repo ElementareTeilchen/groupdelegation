@@ -103,7 +103,7 @@ class GroupDelegationUtility
     }
 
     /**
-     * Sets instance variable delegateableGroups to an array of all delegateable groups from sub admin to $userId
+     * Sets instance variable delegatableGroups to an array of all delegatable groups from sub admin to $userId
      *
      * @param $userId
      * @param $groupsSqlString
@@ -119,7 +119,7 @@ class GroupDelegationUtility
     ): array
     {
         $userId = intval($userId);
-        $delegateableGroups = [];
+        $delegatableGroups = [];
 
         if($ignoreOrganisationUnit) {
             $select = 'delg.uid_foreign';
@@ -162,11 +162,11 @@ class GroupDelegationUtility
             $limit
         );
         while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))  {
-            $delegateableGroups[] = $row['uid_foreign'];
+            $delegatableGroups[] = $row['uid_foreign'];
         }
         $GLOBALS['TYPO3_DB']->sql_free_result($res);
 
-        return $delegateableGroups;
+        return $delegatableGroups;
     }
 
     /**
@@ -190,8 +190,8 @@ class GroupDelegationUtility
             $currentUserGroupsArray = explode(',',$currentUserGroupsString);
         }
 
-        $notDelegateable = array_diff($currentUserGroupsArray,$delegatableGroups);
-        $allGroupIdsForUser = array_merge($notDelegateable,$delegatableGroups);
+        $notDelegatable = array_diff($currentUserGroupsArray,$delegatableGroups);
+        $allGroupIdsForUser = array_merge($notDelegatable,$delegatableGroups);
         $allGroupIdsForUserString = implode(',', array_filter($allGroupIdsForUser));
 
         $select = 'uid, title';
@@ -205,10 +205,10 @@ class GroupDelegationUtility
         );
 
         while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))  {
-            if(in_array($row['uid'],$notDelegateable)) {
-                $groups['hasNotDelegateable'][$row['uid']] = $row['title'];
+            if(in_array($row['uid'],$notDelegatable)) {
+                $groups['hasNotDelegatable'][$row['uid']] = $row['title'];
             } elseif(in_array($row['uid'],$currentUserGroupsArray)) {
-                $groups['hasDelegateable'][$row['uid']] = $row['title'];
+                $groups['hasDelegatable'][$row['uid']] = $row['title'];
             }
         }
         $GLOBALS['TYPO3_DB']->sql_free_result($res);
@@ -233,10 +233,8 @@ class GroupDelegationUtility
         array $enableFields)
     {
         $user = GroupDelegationUtility::getUserDetails($userId);
-
         $userGroupsArray = explode(',',$user['usergroup']);
-
-        $notDelegateable = array_diff($userGroupsArray, $delegatableGroups);
+        $notDelegatable = array_diff($userGroupsArray, $delegatableGroups);
 
         $saveAllowed = [];
         if(is_array($shouldBeDelegated)) {
@@ -247,12 +245,12 @@ class GroupDelegationUtility
             }
         }
 
-        $doSave = array_merge($notDelegateable,$saveAllowed);
+        $doSave = array_merge($notDelegatable,$saveAllowed);
         $doSave = implode(',', $doSave);
 
 
         $table = 'be_users';
-        $where = 'uid='.$userId;
+        $where = 'uid=' . $userId;
         $fields_values = [
             'usergroup' => $doSave,
             // tstamp to know when be_user record was last updated
@@ -301,19 +299,19 @@ class GroupDelegationUtility
     }
 
     /**
-     * @param $delegateableGroups
+     * @param $delegatableGroups
      * @return array
      */
-    public static function getDelegateableGroupsOfUser(array $delegateableGroups): array
+    public static function getDelegatableGroupsOfUser(array $delegatableGroups): array
     {
-        $delegateableGroupsOfUser = [];
+        $delegatableGroupsOfUser = [];
 
-        $grouplist = implode(',',$delegateableGroups);
+        $groupList = implode(',',$delegatableGroups);
 
-        if(!empty($grouplist)) {
+        if(!empty($groupList)) {
             $select = 'uid, title';
             $table = 'be_groups';
-            $where = 'uid IN (' . $grouplist . ')';
+            $where = 'uid IN (' . $groupList . ')';
 
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                 $select,
@@ -321,12 +319,10 @@ class GroupDelegationUtility
                 $where
             );
             while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-                $delegateableGroupsOfUser[$row['uid']] = $row['title'];
+                $delegatableGroupsOfUser[$row['uid']] = $row['title'];
             }
             $GLOBALS['TYPO3_DB']->sql_free_result($res);
         }
-
-        return $delegateableGroupsOfUser;
-
+        return $delegatableGroupsOfUser;
     }
 }

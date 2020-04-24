@@ -33,8 +33,8 @@
 
                             <f:form.hidden name="user" value="{user.uid}"/>
                             <div class="groupdelegation__delegateable">
-                                <h4><f:translate key="be_groups.tx_groupdelegation_delegateable" /></h4>
-                                <f:for each="{delegateableGroupsOfUser}" as="delgroup" key="delGroupId">
+                                <h4><f:translate key="be_groups.tx_groupdelegation_delegatable" /></h4>
+                                <f:for each="{delegatableGroupsOfUser}" as="delgroup" key="delGroupId">
                                     <f:form.checkbox name="groups[]" id="groups-{delGroupId}" title="groups" value="{delGroupId}" checked="{gd:InArray(needle:'{delGroupId}', haystack:'{usergroups}')} == true" />
                                     <label for="groups-{delGroupId}"> {delgroup} </label>
                                 </f:for>

@@ -42,13 +42,13 @@ Extension Configuration
 =========================
 
 In the EM you can set the option "ignoreOrganisationUnit". If you select it, sub-admins are able to edit permissions
-by adding/removing delegateable groups of *every BE user*, who is not a TYPO3 admin. The organisation units will be
+by adding/removing delegatable groups of *every BE user*, who is not a TYPO3 admin. The organisation units will be
 ignored.
 
 If you change it later, you will have additional work with TYPO3 users and their groups.
 
 If you set ignoreOrganisationUnit, sub-admins are able to edit the rights of every non TYPO3 admin BE-user by
-adding/removing their delegateable groups and not just be-users with a specific OU.
+adding/removing their delegatable groups and not just be-users with a specific OU.
 
 **Important**
 
@@ -88,7 +88,7 @@ If you do not ignore OUs, you will have three more settings available. If not, t
 
 If this checkbox is activated, a sub admin can also activate a be user and set start and stop time for the account.
 
-**2) Delegateable Groups**
+**2) Delegatable Groups**
 
 This defines the list of backend groups, which can be assigned by the sub-admin to the BE users of his OU.
 

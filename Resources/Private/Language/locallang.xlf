@@ -34,11 +34,11 @@
             <trans-unit id="tx_groupdelegation.realname">
                 <source>Real Name</source>
             </trans-unit>
-            <trans-unit id="tx_groupdelegation.overview_delegateable">
-                <source>Assigned backend groups - delegateable</source>
+            <trans-unit id="tx_groupdelegation.overview_delegatable">
+                <source>Assigned backend groups - delegatable</source>
             </trans-unit>
-            <trans-unit id="tx_groupdelegation.overview_not_delegateable">
-                <source>Assigned backend groups - not delegateable</source>
+            <trans-unit id="tx_groupdelegation.overview_not_delegatable">
+                <source>Assigned backend groups - not delegatable</source>
             </trans-unit>
             <trans-unit id="tx_groupdelegation.edituser">
                 <source>Edit user</source>
@@ -62,7 +62,7 @@
             <trans-unit id="be_groups.tx_groupdelegation_issubadmingroup">
                 <source>Backend Group is Sub Admin Group</source>
             </trans-unit>
-            <trans-unit id="be_groups.tx_groupdelegation_delegateable">
+            <trans-unit id="be_groups.tx_groupdelegation_delegatable">
                 <source>Groups you can assign - check to assign:</source>
             </trans-unit>
             <trans-unit id="be_groups.tx_groupdelegation_canactivate">
