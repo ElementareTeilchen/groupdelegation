@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
-$tempColumns = array (
-    'tx_groupdelegation_delegateable' => Array (
+$tempColumns = [
+    'tx_groupdelegation_delegateable' => [
         'exclude' => 1,
         'l10n_mode' => 'exclude',
         'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_groups.tx_groupdelegation_delegateable',
-        'config' => Array (
+        'config' => [
             'type' => 'select',
             'renderType' => 'selectMultipleSideBySide',
             'foreign_table' => 'be_groups',
@@ -16,31 +17,31 @@ $tempColumns = array (
             'autoSizeMax' => 10,
             'maxitems' => '200',
             'minitems' => '1',
-        )
-    ),
-    'tx_groupdelegation_issubadmingroup' => array (
+        ]
+    ],
+    'tx_groupdelegation_issubadmingroup' => [
         'exclude' => 1,
         'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_groups.tx_groupdelegation_issubadmingroup',
-        'config' => array (
+        'config' => [
             'type' => 'check',
-        )
-    ),
-    'tx_groupdelegation_canactivate' => array (
+        ]
+    ],
+    'tx_groupdelegation_canactivate' => [
         'exclude' => 1,
         'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_groups.tx_groupdelegation_canactivate',
-        'config' => array (
+        'config' => [
             'type' => 'check',
-        )
-    ),
-);
+        ]
+    ],
+];
 
-$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['groupdelegation']);
+$extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['groupdelegation'];
 if(isset($extConf['ignoreOrganisationUnit']) && $extConf['ignoreOrganisationUnit']==0) {
-    $tempColumns['tx_groupdelegation_organisationunit'] = Array (
+    $tempColumns['tx_groupdelegation_organisationunit'] = [
         'exclude' => 1,
         'l10n_mode' => 'exclude',
         'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_groups.tx_groupdelegation_organisationunit',
-        'config' => Array (
+        'config' => [
             'type' => 'select',
             'foreign_table' => 'tx_groupdelegation_organisationunit',
             'foreign_table_where' => ' ORDER BY tx_groupdelegation_organisationunit.title',
@@ -49,8 +50,8 @@ if(isset($extConf['ignoreOrganisationUnit']) && $extConf['ignoreOrganisationUnit
             'multible' => '0',
             'maxitems' => '200',
             'minitems' => '0',
-        )
-    );
+        ]
+    ];
 }
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('be_groups', $tempColumns);

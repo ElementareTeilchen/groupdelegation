@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace In2code\Groupdelegation\Controller;
 
 /***************************************************************
@@ -27,6 +28,8 @@ namespace In2code\Groupdelegation\Controller;
 
 use \TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use \In2code\Groupdelegation\Utility\GroupDelegationUtility;
+use \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 
 
 /**
@@ -37,20 +40,15 @@ use \In2code\Groupdelegation\Utility\GroupDelegationUtility;
  */
 class BackendController extends ActionController
 {
-    var $groupsSqlString = '';
-    var $editableUsers = array();
-    var $ignoreOrganisationUnit = false;
-    var $editableStartStopTime = false;
-    var $delegateableGroups = array();
-
-    protected $backendUser;
+    protected bool $ignoreOrganisationUnit = false;
+    protected bool $editableStartStopTime = false;
 
     /**
      * @return void
      */
-    public function initializeAction()
+    public function initializeAction(): void
     {
-        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['groupdelegation']);
+        $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['groupdelegation'];
         if(!isset($extConf['ignoreOrganisationUnit'])) {
             $this->ignoreOrganisationUnit = true;
         } else {
@@ -64,9 +62,9 @@ class BackendController extends ActionController
     /**
      * @return void
      */
-    public function indexAction()
+    public function indexAction(): void
     {
-        list($isSubAdmin, $canActivateUsers, $groupIdList) = GroupDelegationUtility::getSubadminStatus();
+        [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
 
         if ($isSubAdmin) {
@@ -74,8 +72,17 @@ class BackendController extends ActionController
             $editableUsers = GroupDelegationUtility::getEditableUsers($groupIdList, $this->ignoreOrganisationUnit, $canActivateUsers);
             $usercount = 0;
             foreach ($editableUsers as $user) {
-                $delegateableGoups = GroupDelegationUtility::getDelegateableGroups($user['uid'], $groupIdList, $this->ignoreOrganisationUnit, $canActivateUsers);
-                $editableUsers[$usercount]['groups'] = GroupDelegationUtility::getSeparatedGroupsOfUser($delegateableGoups, $user['usergroup']);
+                $delegateableGoups = GroupDelegationUtility::getDelegateableGroups(
+                    $user['uid'],
+                    $groupIdList,
+                    $this->ignoreOrganisationUnit,
+                    $canActivateUsers
+                );
+                $editableUsers[$usercount]['groups'] =
+                    GroupDelegationUtility::getSeparatedGroupsOfUser(
+                        $delegateableGoups,
+                        $user['usergroup']
+                    );
                 $usercount++;
             }
 
@@ -91,7 +98,7 @@ class BackendController extends ActionController
     }
 
     /**
-     * @return void
+     * @throws NoSuchArgumentException
      */
     public function editAction()
     {
@@ -101,11 +108,15 @@ class BackendController extends ActionController
             $userId = 0;
         }
 
-
-        list($isSubAdmin, $canActivateUsers, $groupIdList) = GroupDelegationUtility::getSubadminStatus();
+        [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
         if ($isSubAdmin) {
-            $editableUsers = GroupDelegationUtility::getEditableUsers($groupIdList, $this->ignoreOrganisationUnit, $canActivateUsers);
+            $editableUsers =
+                GroupDelegationUtility::getEditableUsers(
+                    $groupIdList,
+                    $this->ignoreOrganisationUnit,
+                    $canActivateUsers
+                );
             foreach ($editableUsers as $user) {
                 if($user['uid'] == $userId) {
                     $allowed = true;
@@ -114,11 +125,16 @@ class BackendController extends ActionController
             }
 
             if ($allowed == true) {
-                $delegateableGroups = GroupDelegationUtility::getDelegateableGroups($userId, $groupIdList, $this->ignoreOrganisationUnit, $canActivateUsers);
+                $delegateableGroups =
+                    GroupDelegationUtility::getDelegatableGroups(
+                        $userId, $groupIdList, $this->ignoreOrganisationUnit, $canActivateUsers);
 
                 $user = GroupDelegationUtility::getUserDetails($userId);
 
-                $groupsSeparated = GroupDelegationUtility::getSeparatedGroupsOfUser($delegateableGroups, $user['usergroup']);
+                $groupsSeparated =
+                    GroupDelegationUtility::getSeparatedGroupsOfUser(
+                        $delegateableGroups, $user['usergroup']
+                    );
 
                 $userGroupsArray = explode(',',$user['usergroup']);
 
@@ -142,17 +158,23 @@ class BackendController extends ActionController
     }
 
     /**
-     * @return void
+     * @throws NoSuchArgumentException
+     * @throws StopActionException
      */
     public function saveAction()
     {
         $userId = intval($this->request->getArgument('user'));
         $shouldBeDelegated = (array)$this->request->getArgument('groups');
 
-        list($isSubAdmin, $canActivateUsers, $groupIdList) = GroupDelegationUtility::getSubadminStatus();
+        [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
         if ($isSubAdmin) {
-            $editableUsers = GroupDelegationUtility::getEditableUsers($groupIdList, $this->ignoreOrganisationUnit, $canActivateUsers);
+            $editableUsers =
+                GroupDelegationUtility::getEditableUsers(
+                    $groupIdList,
+                    $this->ignoreOrganisationUnit,
+                    $canActivateUsers
+                );
             foreach ($editableUsers as $user) {
                 if($user['uid'] == $userId) {
                     $allowed = true;
@@ -161,8 +183,7 @@ class BackendController extends ActionController
             }
 
             if ($allowed == true) {
-
-                $enableFields = array();
+                $enableFields = [];
                 if ($canActivateUsers) {
                     $enableFields['disable'] = $this->request->getArgument('disable');
                     if ($this->editableStartStopTime) {
@@ -180,6 +201,7 @@ class BackendController extends ActionController
 
                 GroupDelegationUtility::saveUser($userId, $delegateableGroups, $shouldBeDelegated, $enableFields);
             }
+            // @extensionScannerIgnoreLine
             $this->redirect('index');
         }
 

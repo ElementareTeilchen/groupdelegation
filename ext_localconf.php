@@ -3,10 +3,7 @@
 if (!defined('TYPO3_MODE')) {
 	die ('Access denied.');
 }
-
-if (TYPO3_MODE === 'BE') {
-
-    call_user_func(
+ call_user_func(
         function ($extKey) {
 
             $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
@@ -19,4 +16,3 @@ if (TYPO3_MODE === 'BE') {
         },
         $_EXTKEY
     );
-}

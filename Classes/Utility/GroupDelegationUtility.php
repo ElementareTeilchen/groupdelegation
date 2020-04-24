@@ -4,7 +4,7 @@ namespace In2code\Groupdelegation\Utility;
 /**
  * Class GroupDelegationUtility
  *
- * @author in2marcus
+ * @author Marcus Schwemer (marcus.schwemer@in2code.de)
  * @package In2code\Groupdelegation\Utility
  */
 class GroupDelegationUtility
@@ -41,7 +41,7 @@ class GroupDelegationUtility
             $groupsSqlString = implode(',',$groupId);
         }
 
-        return array($isSubAdmin, $canActivateUsers, $groupsSqlString);
+        return [$isSubAdmin, $canActivateUsers, $groupsSqlString];
 
     }
 
@@ -53,9 +53,12 @@ class GroupDelegationUtility
      * @param bool $canActivateUsers
      * @return array
      */
-    public static function getEditableUsers(string $groupsSqlString, bool $ignoreOrganisationUnit = true, bool $canActivateUsers): array
+    public static function getEditableUsers(
+        string $groupsSqlString,
+        bool $ignoreOrganisationUnit,
+        bool $canActivateUsers
+    ): array
     {
-
         // make sure to start with an empty array if called twice
         $editableUsers = [];
 
@@ -108,9 +111,13 @@ class GroupDelegationUtility
      * @param bool $canActivateUsers
      * @return array
      */
-    public static function getDelegateableGroups(int $userId, string $groupsSqlString, bool $ignoreOrganisationUnit = true, bool $canActivateUsers = false): array
+    public static function getDelegatableGroups(
+        int $userId,
+        string $groupsSqlString,
+        bool $ignoreOrganisationUnit = true,
+        bool $canActivateUsers = false
+    ): array
     {
-
         $userId = intval($userId);
         $delegateableGroups = [];
 
@@ -163,25 +170,28 @@ class GroupDelegationUtility
     }
 
     /**
-     * Builds an array with a string of all delegateable and a string of all not delegateable groups
+     * Builds an array with a string of all delegatable and a string of all not delegatable groups
      *
-     * @param $delegateableGroups
+     * @param $delegatableGroups
      * @param string $currentUserGroupsString
      * @return array
      */
-    public static function getSeparatedGroupsOfUser(array $delegateableGroups, string $currentUserGroupsString = ''): array
+    public static function getSeparatedGroupsOfUser(
+        array $delegatableGroups,
+        string $currentUserGroupsString = ''
+    ): array
     {
 
         $groups = [];
 
         if($currentUserGroupsString == '') {
-            $currentUserGroupsArray = array();
+            $currentUserGroupsArray = [];
         } else {
             $currentUserGroupsArray = explode(',',$currentUserGroupsString);
         }
 
-        $notDelegateable = array_diff($currentUserGroupsArray,$delegateableGroups);
-        $allGroupIdsForUser = array_merge($notDelegateable,$delegateableGroups);
+        $notDelegateable = array_diff($currentUserGroupsArray,$delegatableGroups);
+        $allGroupIdsForUser = array_merge($notDelegateable,$delegatableGroups);
         $allGroupIdsForUserString = implode(',', array_filter($allGroupIdsForUser));
 
         $select = 'uid, title';
@@ -193,8 +203,6 @@ class GroupDelegationUtility
             $table,
             $where
         );
-        $groupsDelegateable = array();
-        $groupsNotDelegateable = array();
 
         while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))  {
             if(in_array($row['uid'],$notDelegateable)) {
@@ -213,23 +221,27 @@ class GroupDelegationUtility
      * do this changes.
      *
      * @param int $userId
-     * @param array $delegateableGroups
+     * @param array $delegatableGroups
      * @param array $shouldBeDelegated
      * @param array $enableFields
      * @return void
      */
-    public static function saveUser(int $userId, array $delegateableGroups, array $shouldBeDelegated, array $enableFields)
+    public static function saveUser(
+        int $userId,
+        array $delegatableGroups,
+        array $shouldBeDelegated,
+        array $enableFields)
     {
         $user = GroupDelegationUtility::getUserDetails($userId);
 
         $userGroupsArray = explode(',',$user['usergroup']);
 
-        $notDelegateable = array_diff($userGroupsArray, $delegateableGroups);
+        $notDelegateable = array_diff($userGroupsArray, $delegatableGroups);
 
         $saveAllowed = [];
         if(is_array($shouldBeDelegated)) {
             foreach($shouldBeDelegated as $shouldGroup) {
-                if(in_array($shouldGroup,$delegateableGroups)) {
+                if(in_array($shouldGroup,$delegatableGroups)) {
                     $saveAllowed[] = $shouldGroup;
                 }
             }
@@ -241,11 +253,11 @@ class GroupDelegationUtility
 
         $table = 'be_users';
         $where = 'uid='.$userId;
-        $fields_values = array(
+        $fields_values = [
             'usergroup' => $doSave,
             // tstamp to know when be_user record was last updated
             'tstamp' => time()
-        );
+        ];
         if (isset($enableFields['disable'])) {
             $fields_values['disable'] = $enableFields['disable'];
         }
@@ -262,9 +274,7 @@ class GroupDelegationUtility
             $where,
             $fields_values
         );
-
     }
-
 
     /**
      * @param $userId
@@ -272,7 +282,6 @@ class GroupDelegationUtility
      */
     public static function getUserDetails(int $userId): array
     {
-
         $user = [];
 
         $select = 'uid,username,usergroup,realName,disable,starttime,endtime';
