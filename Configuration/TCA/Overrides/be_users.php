@@ -16,7 +16,7 @@ call_user_func(function () {
                 'foreign_table_where' => ' ORDER BY tx_groupdelegation_organisationunit.title',
                 'MM' => 'tx_groupdelegation_beusers_organisationunit_mm',
                 'size' => '8',
-                'multible' => '0',
+                'multiple' => '0',
                 'maxitems' => '200',
                 'minitems' => '0',
             ]

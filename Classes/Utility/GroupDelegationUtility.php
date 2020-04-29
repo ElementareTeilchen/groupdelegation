@@ -1,22 +1,24 @@
 <?php
+declare(strict_types=1);
 namespace In2code\Groupdelegation\Utility;
 
-use phpDocumentor\Reflection\Types\Self_;
+use Doctrine\DBAL\DBALException;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
+use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class GroupDelegationUtility
  *
  * @author Marcus Schwemer (marcus.schwemer@in2code.de)
- * @package In2code\Groupdelegation\Utility
  */
 class GroupDelegationUtility
 {
 
     /**
-     *
      * Checks whether
      * - the current be user is part of a sub-admin-group,
      * - is allowed to enable and disable users,
@@ -51,12 +53,11 @@ class GroupDelegationUtility
     }
 
     /**
-     * Returns the list of users, who can be edited by the current be user
-     *
-     * @param $groupsSqlString
+     * @param string $groupsSqlString
      * @param bool $ignoreOrganisationUnit
      * @param bool $canActivateUsers
      * @return array
+     * @throws DBALException
      */
     public static function getEditableUsers(
         string $groupsSqlString,
@@ -65,7 +66,7 @@ class GroupDelegationUtility
     ): array
     {
         if ($ignoreOrganisationUnit === false) {
-            $editableUsers = self::getEditableUsersIgnoreOU($canActivateUsers);
+            $editableUsers = self::getEditableUsersIgnoreOU();
         } else {
             $editableUsers = self::getEditableUsersRespectOU($canActivateUsers, $groupsSqlString);
         }
@@ -76,69 +77,34 @@ class GroupDelegationUtility
      * @param bool $canActivateUsers
      * @param string $groupsSqlString
      * @return array
+     * @throws DBALException
      */
-    private static function  getEditableUsersRespectOU(bool $canActivateUsers, string $groupsSqlString): array {
+    private static function getEditableUsersRespectOU(bool $canActivateUsers, string $groupsSqlString): array {
 
-        $queryBuilder = self::getQueryBuilderForTable('be_users');
-        $statement = $queryBuilder
-            ->select('be_users.uid,be_users.username,be_users.usergroup,be_users.realName')
-            ->from('be_users')
-            ->innerJoin(
-                'be_users',
-                'tx_groupdelegation_beusers_organisationunit_mm',
-                'tx_groupdelegation_beusers_organisationunit_mm_orig',
-                $queryBuilder->expr()->eq(
-                    'tx_groupdelegation_beusers_organisationunit_mm.uid_local',
-                    $queryBuilder->quoteIdentifier('be_users.uid')
-                )
-            )
-            ->innerJoin(
-                'tx_groupdelegation_beusers_organisationunit_mm_orig',
-                'tx_groupdelegation_organisationunit',
-                'tx_groupdelegation_organisationunit_orig',
-                $queryBuilder->expr()->eq(
-                    'tx_groupdelegation_organisationunit.uid',
-                    $queryBuilder->quoteIdentifier('tx_groupdelegation_organisationunit.uid')
-                )
-            )
-            ->innerJoin(
-                'tx_groupdelegation_organisationunit_orig',
-                'tx_groupdelegation_begroups_organisationunit_mm',
-                'tx_groupdelegation_begroups_organisationunit_mm_orig',
-                $queryBuilder->expr()->eq(
-                    'tx_groupdelegation_begroups_organisationunit_mm.uid',
-                    $queryBuilder->quoteIdentifier('tx_groupdelegation_organisationunit.uid')
-                )
-            )
-            ->innerJoin(
-                'tx_groupdelegation_begroups_organisationunit_mm_orig',
-                'be_groups',
-                'be_groups',
-                $queryBuilder->expr()->eq(
-                    'tx_groupdelegation_begroups_organisationunit_mm.uid_local',
-                    $queryBuilder->quoteIdentifier('be_groups.uid')
-                )
-            )
-            ->where(
-                $queryBuilder->expr()->in('be_groups.uid', $queryBuilder->createNamedParameter($groupsSqlString, \PDO::PARAM_STR))
-            )
-            ->andWhere(
-                $queryBuilder->expr()->eq('be_users.admin', 0)
-            )
-            ->groupBy('be_users.uid')
-            ->orderBy('be_users.username');
+        $select = 'SELECT be_users.uid,be_users.username,be_users.usergroup,be_users.realName ';
+        $from = ' FROM be_groups INNER JOIN tx_groupdelegation_begroups_organisationunit_mm ON be_groups.uid = tx_groupdelegation_begroups_organisationunit_mm.uid_local
+			INNER JOIN tx_groupdelegation_organisationunit ON tx_groupdelegation_begroups_organisationunit_mm.uid_foreign = tx_groupdelegation_organisationunit.uid
+			INNER JOIN tx_groupdelegation_beusers_organisationunit_mm ON tx_groupdelegation_organisationunit.uid = tx_groupdelegation_beusers_organisationunit_mm.uid_foreign
+			INNER JOIN be_users ON tx_groupdelegation_beusers_organisationunit_mm.uid_local = be_users.uid';
+        $where =  ' WHERE be_groups.uid in (' . $groupsSqlString . ') ';
+        $where .= ' AND be_users.admin = 0';
+        $where .= ' AND tx_groupdelegation_organisationunit.hidden = 0 AND tx_groupdelegation_organisationunit.deleted = 0 ';
+        $where .= ' AND be_groups.hidden = 0 AND be_groups.deleted = 0';
+        if (!$canActivateUsers) {
+            $where .= ' AND be_users.disable = 0';
+            $where .= ' AND (be_users.starttime < ' . $GLOBALS["EXEC_TIME"] . ' OR be_users.starttime = 0)';
+            $where .= ' AND (be_users.endtime > ' . $GLOBALS["EXEC_TIME"]. ' OR be_users.endtime = 0)';
+        }
+        $groupBy = ' GROUP BY be_users.uid ';
+        $orderBy = ' ORDER BY be_users.username ';
 
-//  ToDo: extend sql restrictions like done with `BEEnableFields` and `deleteClause`
-//
-//        $where .=  \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tx_groupdelegation_organisationunit') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('tx_groupdelegation_organisationunit');
-//        $where .=  \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_groups') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_groups');
-//
-//        if (!$canActivateUsers) {
-//            $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_users');
-//        }
-//        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_users');
-
-        return $statement->execute()->fetchAll();
+        return $rows = self::getConnection('be_groups')->executeQuery(
+            $select .
+            $from .
+            $where .
+            $groupBy .
+            $orderBy
+        )->fetchAll(\PDO::FETCH_NUM);
     }
 
     /**
@@ -159,11 +125,12 @@ class GroupDelegationUtility
     /**
      * Sets instance variable delegatableGroups to an array of all delegatable groups from sub admin to $userId
      *
-     * @param $userId
-     * @param $groupsSqlString
+     * @param int $userId
+     * @param string $groupsSqlString
      * @param bool $ignoreOrganisationUnit
      * @param bool $canActivateUsers
      * @return array
+     * @throws DBALException
      */
     public static function getDelegatableGroups(
         int $userId,
@@ -176,59 +143,53 @@ class GroupDelegationUtility
         $delegatableGroups = [];
 
         if($ignoreOrganisationUnit) {
-            $select = 'delg.uid_foreign';
-            $table = 'be_groups
-				INNER JOIN tx_groupdelegation_subadmin_begroups_mm delg ON be_groups.uid = delg.uid_local';
-            $where = 'delg.uid_local IN (' . $groupsSqlString . ')';
-            $where .=  \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_groups') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_groups');
-
+            $select = 'SELECT delg.uid_foreign';
+            $from = ' FROM be_groups INNER JOIN tx_groupdelegation_subadmin_begroups_mm delg ON be_groups.uid = delg.uid_local';
+            $where = ' WHERE delg.uid_local IN (' . $groupsSqlString . ')';
+            $where .= ' AND be_groups.deleted = 0 AND be_groups.hidden = 0';
         } else {
-            $select = 'delg.uid_foreign';
-            $table = 'be_users
+            $select = 'SELECT delg.uid_foreign';
+            $from = ' FROM be_users
 				INNER JOIN tx_groupdelegation_beusers_organisationunit_mm beuou ON be_users.uid = beuou.uid_local
 				INNER JOIN tx_groupdelegation_organisationunit ON beuou.uid_foreign = tx_groupdelegation_organisationunit.uid
 				INNER JOIN tx_groupdelegation_begroups_organisationunit_mm begou ON tx_groupdelegation_organisationunit.uid = begou.uid_foreign
 				INNER JOIN be_groups begroupssubadmin ON begou.uid_local = begroupssubadmin.uid
 				INNER JOIN tx_groupdelegation_subadmin_begroups_mm delg ON begroupssubadmin.uid = delg.uid_local
 				INNER JOIN be_groups ON be_groups.uid = delg.uid_foreign';
-            $where = 'be_users.uid = ' . $userId;
+            $where = ' WHERE be_users.uid = ' . $userId;
             $where .= ' AND delg.uid_local IN (' . $groupsSqlString . ')';
             if (!$canActivateUsers) {
-                $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_users');
+                $where .= ' AND be_users.disable = 0';
+                $where .= ' AND (be_users.starttime < ' . $GLOBALS["EXEC_TIME"] . ' OR be_users.starttime = 0)';
+                $where .= ' AND (be_users.endtime > ' . $GLOBALS["EXEC_TIME"]. ' OR be_users.endtime = 0)';
             }
-            $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_users');
-
-            $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tx_groupdelegation_organisationunit') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('tx_groupdelegation_organisationunit');
-            $enableClauseBeGroups = \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_groups') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_groups');
-            $where .= str_replace('be_groups','begroupssubadmin',$enableClauseBeGroups);
-            $where .= $enableClauseBeGroups;
+            $where .= ' AND be_users.deleted = 0';
+            $where .= ' AND tx_groupdelegation_organisationunit.deleted = 0 AND tx_groupdelegation_organisationunit.hidden = 0';
+            $where .= ' AND begroupssubadmin.hidden = 0 AND begroupssubadmin.deleted =0';
         }
 
-        $groupBy = 'delg.uid_foreign';
+        $groupBy = ' GROUP BY delg.uid_foreign';
         $orderBy = '';
-        $limit = '';
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery (
-            $select,
-            $table,
-            $where,
-            $groupBy,
-            $orderBy,
-            $limit
+        $statement = self::getConnection('be_groups')->executeQuery(
+            $select .
+            $from .
+            $where .
+            $groupBy .
+            $orderBy
         );
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))  {
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC))  {
             $delegatableGroups[] = $row['uid_foreign'];
         }
-        $GLOBALS['TYPO3_DB']->sql_free_result($res);
-
         return $delegatableGroups;
     }
 
     /**
      * Builds an array with a string of all delegatable and a string of all not delegatable groups
      *
-     * @param $delegatableGroups
+     * @param array $delegatableGroups
      * @param string $currentUserGroupsString
      * @return array
+     * @throws DBALException
      */
     public static function getSeparatedGroupsOfUser(
         array $delegatableGroups,
@@ -248,25 +209,22 @@ class GroupDelegationUtility
         $allGroupIdsForUser = array_merge($notDelegatable,$delegatableGroups);
         $allGroupIdsForUserString = implode(',', array_filter($allGroupIdsForUser));
 
-        $select = 'uid, title';
-        $table = 'be_groups';
-        $where = 'uid IN (' . $allGroupIdsForUserString . ')';
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('be_groups') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('be_groups');
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery (
-            $select,
-            $table,
-            $where
-        );
+        $queryBuilder = self::getQueryBuilderForTable('be_groups');
+        $statement = $queryBuilder
+            ->select('uid', 'title')
+            ->from('be_groups')
+            ->where(
+                $queryBuilder->expr()->in('uid',$allGroupIdsForUserString)
+            )
+            ->execute();
 
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))  {
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC))  {
             if(in_array($row['uid'],$notDelegatable)) {
                 $groups['hasNotDelegatable'][$row['uid']] = $row['title'];
             } elseif(in_array($row['uid'],$currentUserGroupsArray)) {
                 $groups['hasDelegatable'][$row['uid']] = $row['title'];
             }
         }
-        $GLOBALS['TYPO3_DB']->sql_free_result($res);
-
         return $groups;
     }
 
@@ -302,9 +260,6 @@ class GroupDelegationUtility
         $doSave = array_merge($notDelegatable,$saveAllowed);
         $doSave = implode(',', $doSave);
 
-
-        $table = 'be_users';
-        $where = 'uid=' . $userId;
         $fields_values = [
             'usergroup' => $doSave,
             // tstamp to know when be_user record was last updated
@@ -320,12 +275,15 @@ class GroupDelegationUtility
             $fields_values['endtime'] = $enableFields['endtime'];
         }
 
-        // have to be done via exec_UPDATEquery since if sub admin is no TYPO3 admin the user has no permission for $tce->process_datamap();
-        $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
-            $table,
-            $where,
-            $fields_values
-        );
+        $queryBuilder = self::getQueryBuilderForTable('be_users');
+        $queryBuilder->update('be_users')
+            ->where (
+                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($userId))
+            );
+        foreach ($fields_values as $field => $value) {
+            $queryBuilder->set($field,$value);
+        }
+        $queryBuilder->execute();
     }
 
     /**
@@ -336,19 +294,18 @@ class GroupDelegationUtility
     {
         $user = [];
 
-        $select = 'uid,username,usergroup,realName,disable,starttime,endtime';
-        $table = 'be_users';
-        $where = 'uid = '.$userId;
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery (
-            $select,
-            $table,
-            $where
-        );
-        if($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+        $fields = ['uid','username','usergroup','realName','disable','starttime','endtime'];
+        $queryBuilder = self::getQueryBuilderForTable('be_users');
+        $statement = $queryBuilder
+            ->select(...$fields)
+            ->from('be_users')
+            ->where (
+                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($userId))
+            )
+            ->execute();
+        if($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $user = $row;
         }
-        $GLOBALS['TYPO3_DB']->sql_free_result($res);
-
         return $user;
     }
 
@@ -363,19 +320,17 @@ class GroupDelegationUtility
         $groupList = implode(',',$delegatableGroups);
 
         if(!empty($groupList)) {
-            $select = 'uid, title';
-            $table = 'be_groups';
-            $where = 'uid IN (' . $groupList . ')';
+            $queryBuilder = self::getQueryBuilderForTable('be_groups');
+            $statement = $queryBuilder
+                ->select('uid', 'title')
+                ->from('be_groups')
+                ->where(
+                    $queryBuilder->expr()->in('uid',$groupList)
+                )->execute();
 
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                $select,
-                $table,
-                $where
-            );
-            while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+            while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
                 $delegatableGroupsOfUser[$row['uid']] = $row['title'];
             }
-            $GLOBALS['TYPO3_DB']->sql_free_result($res);
         }
         return $delegatableGroupsOfUser;
     }
@@ -390,5 +345,15 @@ class GroupDelegationUtility
             ->getQueryBuilderForTable($table);
         $queryBuilder->getRestrictions()->removeAll();
         return $queryBuilder;
+    }
+
+    /**
+     * @param string $table
+     * @return Connection
+     */
+    protected static function getConnection(string $table): Connection
+    {
+        return GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getConnectionForTable($table);
     }
 }

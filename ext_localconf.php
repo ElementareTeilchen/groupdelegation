@@ -11,7 +11,7 @@ if (!defined('TYPO3_MODE')) {
             $iconRegistry->registerIcon(
                 'extensions-groupdelegation-subadmin-group',
                 \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-                ['source' => 'EXT:' . $extKey . '/Resources/Public/Images/sub-admin-group-backend.svg']
+                ['source' => 'EXT:groupdelegation/Resources/Public/Images/sub-admin-group-backend.svg']
             );
         },
         $_EXTKEY

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace In2code\Groupdelegation\ViewHelpers;
 
 use TYPO3\CMS\Core\Core\Environment;
@@ -15,7 +16,7 @@ class InArrayViewHelper extends AbstractViewHelper
     {
         parent::initializeArguments();
         $this->registerArgument('needle', 'string', 'String (aka needle) to look for in the array', true);
-        $this->registerArgument('array', 'array', 'Array (aka haystack), where to look for the needle', true);
+        $this->registerArgument('haystack', 'array', 'Array (aka haystack), where to look for the needle', true);
     }
 
     /**

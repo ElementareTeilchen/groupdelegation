@@ -24,6 +24,7 @@ $tempColumns = [
         'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_groups.tx_groupdelegation_issubadmingroup',
         'config' => [
             'type' => 'check',
+            'renderType' => 'checkboxToggle',
         ]
     ],
     'tx_groupdelegation_canactivate' => [
@@ -31,6 +32,7 @@ $tempColumns = [
         'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_groups.tx_groupdelegation_canactivate',
         'config' => [
             'type' => 'check',
+            'renderType' => 'checkboxToggle',
         ]
     ],
 ];
@@ -43,11 +45,12 @@ if(isset($extConf['ignoreOrganisationUnit']) && $extConf['ignoreOrganisationUnit
         'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_groups.tx_groupdelegation_organisationunit',
         'config' => [
             'type' => 'select',
+            'renderType' => 'selectMultipleSideBySide',
             'foreign_table' => 'tx_groupdelegation_organisationunit',
             'foreign_table_where' => ' ORDER BY tx_groupdelegation_organisationunit.title',
             'MM' => 'tx_groupdelegation_begroups_organisationunit_mm',
             'size' => '8',
-            'multible' => '0',
+            'multiple' => '0',
             'maxitems' => '200',
             'minitems' => '0',
         ]
