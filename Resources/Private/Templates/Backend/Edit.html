@@ -27,8 +27,8 @@
                                 </div>
                                 <f:if condition="{editableStartStopTime}">
                                   <div class="groupdelegation__startstop">
-                                        <label for="starttime"><f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.starttime"/></label> <f:form.textfield name="starttime" type="date" value="{f:if(condition: user.starttime, then: user.starttime, else: null) -> f:format.date( format: 'Y-m-d' )}" placeholder="JJJJ-MM-DD" />
-                                        <label for="endtime"><f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.endtime"/></label> <f:form.textfield name="endtime" type="date" value="{f:if(condition: user.endtime, then: user.endtime, else: null) -> f:format.date( format: 'Y-m-d' )}" placeholder="JJJJ-MM-DD" />
+                                        <label for="starttime"><f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.starttime"/></label> <f:form.textfield name="starttime" type="date" value="{f:if(condition: user.starttime, then: '{user.starttime -> f:format.date( format: \'Y-m-d\' )}', else: '')}" placeholder="JJJJ-MM-DD" />
+                                        <label for="endtime"><f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.endtime"/></label> <f:form.textfield name="endtime" type="date" value="{f:if(condition: user.endtime, then: '{user.endtime -> f:format.date( format: \'Y-m-d\' )}', else: '')}" placeholder="JJJJ-MM-DD" />
                                   </div>
                                 </f:if>
                             </f:if>
