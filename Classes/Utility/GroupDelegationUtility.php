@@ -65,7 +65,7 @@ class GroupDelegationUtility
         bool $canActivateUsers
     ): array
     {
-        if ($ignoreOrganisationUnit === false) {
+        if ($ignoreOrganisationUnit === true) {
             $editableUsers = self::getEditableUsersIgnoreOU();
         } else {
             $editableUsers = self::getEditableUsersRespectOU($canActivateUsers, $groupsSqlString);
@@ -104,7 +104,7 @@ class GroupDelegationUtility
             $where .
             $groupBy .
             $orderBy
-        )->fetchAll(\PDO::FETCH_NUM);
+        )->fetchAllAssociative();
     }
 
     /**
@@ -114,12 +114,12 @@ class GroupDelegationUtility
     {
         $queryBuilder = self::getQueryBuilderForTable('be_users');
         return $queryBuilder
-            ->select('uid,uid,username,usergroup,realName')
-            ->from('be_groups')
+            ->select('uid','username','usergroup','realName')
+            ->from('be_users')
             ->where($queryBuilder->expr()->eq('admin', 0))
             ->orderBy('username')
             ->execute()
-            ->fetchAll();
+            ->fetchAllAssociative();
     }
 
     /**
@@ -266,7 +266,7 @@ class GroupDelegationUtility
             'tstamp' => time()
         ];
         if (isset($enableFields['disable'])) {
-            $fields_values['disable'] = $enableFields['disable'];
+            $fields_values['disable'] = intval($enableFields['disable']);
         }
         if (isset($enableFields['starttime'])) {
             $fields_values['starttime'] = $enableFields['starttime'];
