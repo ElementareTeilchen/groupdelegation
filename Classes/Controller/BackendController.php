@@ -40,8 +40,15 @@ use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
  */
 class BackendController extends ActionController
 {
-    protected bool $ignoreOrganisationUnit = true;
-    protected bool $editableStartStopTime = false;
+    /**
+     * @var bool
+     */
+    protected $ignoreOrganisationUnit = true;
+
+    /**
+     * @var bool
+     */
+    protected $editableStartStopTime = false;
 
     /**
      * @return void
