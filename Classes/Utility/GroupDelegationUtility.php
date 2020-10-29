@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace In2code\Groupdelegation\Utility;
 
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\FetchMode;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
@@ -104,7 +105,7 @@ class GroupDelegationUtility
             $where .
             $groupBy .
             $orderBy
-        )->fetchAllAssociative();
+        )->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
@@ -119,7 +120,7 @@ class GroupDelegationUtility
             ->where($queryBuilder->expr()->eq('admin', 0))
             ->orderBy('username')
             ->execute()
-            ->fetchAllAssociative();
+            ->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
