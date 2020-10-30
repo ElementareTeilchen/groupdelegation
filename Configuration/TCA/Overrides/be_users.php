@@ -7,7 +7,7 @@ call_user_func(function () {
     $tempColumns = [
         'tx_groupdelegation_organisationunit' => [
             'exclude' => 1,
-            #'l10n_mode' => 'exclude',
+            //'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:be_users.tx_groupdelegation_organisationunit',
             'config' => [
                 'type' => 'select',

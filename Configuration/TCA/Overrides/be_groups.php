@@ -39,7 +39,7 @@ $tempColumns = [
 ];
 
 $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['groupdelegation'];
-if(isset($extConf['ignoreOrganisationUnit']) && $extConf['ignoreOrganisationUnit']==0) {
+if (isset($extConf['ignoreOrganisationUnit']) && $extConf['ignoreOrganisationUnit']==0) {
     $tempColumns['tx_groupdelegation_organisationunit'] = [
         'exclude' => 1,
         'l10n_mode' => 'exclude',
@@ -69,4 +69,3 @@ $GLOBALS['TCA']['be_groups']['types']['0']['subtype_value_field']= 'tx_groupdele
 $GLOBALS['TCA']['be_groups']['types']['0']['subtypes_addlist']['1'] = 'tx_groupdelegation_canactivate,tx_groupdelegation_delegateable,tx_groupdelegation_organisationunit';
 $GLOBALS['TCA']['be_groups']['types']['1']['subtype_value_field']='tx_groupdelegation_issubadmingroup';
 $GLOBALS['TCA']['be_groups']['types']['1']['subtypes_addlist']['1'] = 'tx_groupdelegation_canactivate,tx_groupdelegation_delegateable,tx_groupdelegation_organisationunit';
-

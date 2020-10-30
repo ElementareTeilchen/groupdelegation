@@ -48,7 +48,7 @@
     }
   },
   "scripts": {
-    "ci:php:lint": "./build/bin/phplint",
+    "ci:php:lint": "phplint",
     "ci:php:phpstan": ".build/bin/phpstan analyse",
     "ci:php:php-cs-fixer": " .build/bin/php-cs-fixer --diff -v fix",
     "post-autoload-dump": [

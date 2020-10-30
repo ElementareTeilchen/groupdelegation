@@ -1,13 +1,13 @@
 <?php
 
 return [
-    "ctrl" => [
+    'ctrl' => [
         'title' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf:tx_groupdelegation_organisationunit',
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'default_sortby' => "ORDER BY crdate",
+        'default_sortby' => 'ORDER BY crdate',
         'delete' => 'deleted',
         'rootLevel' => '1',
         'enablecolumns' => [
@@ -15,10 +15,10 @@ return [
         ],
         'iconfile' => 'EXT:groupdelegation/Resources/Public/Images/sitemap.svg',
     ],
-    "interface" => [
-        "showRecordFieldList" => "hidden,title"
+    'interface' => [
+        'showRecordFieldList' => 'hidden,title'
     ],
-    "columns" => [
+    'columns' => [
         'hidden' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
@@ -36,10 +36,10 @@ return [
             ]
         ],
     ],
-    "types" => [
-        "0" => ["showitem" => "hidden,--palette--;;1,title"]
+    'types' => [
+        '0' => ['showitem' => 'hidden,--palette--;;1,title']
     ],
-    "palettes" => [
-        "1" => ["showitem" => ""]
+    'palettes' => [
+        '1' => ['showitem' => '']
     ]
 ];

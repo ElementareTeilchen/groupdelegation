@@ -7,14 +7,11 @@ use Doctrine\DBAL\FetchMode;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
-use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class GroupDelegationUtility
  *
- * @author Marcus Schwemer (marcus.schwemer@in2code.de)
  */
 class GroupDelegationUtility
 {
@@ -29,7 +26,6 @@ class GroupDelegationUtility
      */
     public static function getSubadminStatus(): array
     {
-
         $groupsSqlString = '';
         $groupId = [];
 
@@ -37,20 +33,19 @@ class GroupDelegationUtility
         $canActivateUsers = false;
 
         foreach ($GLOBALS['BE_USER']->userGroups as $singleGroup) {
-            if($singleGroup['tx_groupdelegation_issubadmingroup']=== 1) {
+            if ($singleGroup['tx_groupdelegation_issubadmingroup']=== 1) {
                 $isSubAdmin = true;
-                if($singleGroup['tx_groupdelegation_canactivate']=== 1) {
+                if ($singleGroup['tx_groupdelegation_canactivate']=== 1) {
                     $canActivateUsers = true;
                 }
                 $groupId[] =  $singleGroup['uid'];
             }
         }
-        if($isSubAdmin===true) {
-            $groupsSqlString = implode(',',$groupId);
+        if ($isSubAdmin===true) {
+            $groupsSqlString = implode(',', $groupId);
         }
 
         return [$isSubAdmin, $canActivateUsers, $groupsSqlString];
-
     }
 
     /**
@@ -64,8 +59,7 @@ class GroupDelegationUtility
         string $groupsSqlString,
         bool $ignoreOrganisationUnit,
         bool $canActivateUsers
-    ): array
-    {
+    ): array {
         if ($ignoreOrganisationUnit === true) {
             $editableUsers = self::getEditableUsersIgnoreOU();
         } else {
@@ -80,8 +74,8 @@ class GroupDelegationUtility
      * @return array
      * @throws DBALException
      */
-    private static function getEditableUsersRespectOU(bool $canActivateUsers, string $groupsSqlString): array {
-
+    private static function getEditableUsersRespectOU(bool $canActivateUsers, string $groupsSqlString): array
+    {
         $select = 'SELECT be_users.uid,be_users.username,be_users.usergroup,be_users.realName ';
         $from = ' FROM be_groups INNER JOIN tx_groupdelegation_begroups_organisationunit_mm ON be_groups.uid = tx_groupdelegation_begroups_organisationunit_mm.uid_local
 			INNER JOIN tx_groupdelegation_organisationunit ON tx_groupdelegation_begroups_organisationunit_mm.uid_foreign = tx_groupdelegation_organisationunit.uid
@@ -93,8 +87,8 @@ class GroupDelegationUtility
         $where .= ' AND be_groups.hidden = 0 AND be_groups.deleted = 0';
         if (!$canActivateUsers) {
             $where .= ' AND be_users.disable = 0';
-            $where .= ' AND (be_users.starttime < ' . $GLOBALS["EXEC_TIME"] . ' OR be_users.starttime = 0)';
-            $where .= ' AND (be_users.endtime > ' . $GLOBALS["EXEC_TIME"]. ' OR be_users.endtime = 0)';
+            $where .= ' AND (be_users.starttime < ' . $GLOBALS['EXEC_TIME'] . ' OR be_users.starttime = 0)';
+            $where .= ' AND (be_users.endtime > ' . $GLOBALS['EXEC_TIME'] . ' OR be_users.endtime = 0)';
         }
         $groupBy = ' GROUP BY be_users.uid ';
         $orderBy = ' ORDER BY be_users.username ';
@@ -115,7 +109,7 @@ class GroupDelegationUtility
     {
         $queryBuilder = self::getQueryBuilderForTable('be_users');
         return $queryBuilder
-            ->select('uid','username','usergroup','realName')
+            ->select('uid', 'username', 'usergroup', 'realName')
             ->from('be_users')
             ->where($queryBuilder->expr()->eq('admin', 0))
             ->orderBy('username')
@@ -138,12 +132,11 @@ class GroupDelegationUtility
         string $groupsSqlString,
         bool $ignoreOrganisationUnit = true,
         bool $canActivateUsers = false
-    ): array
-    {
+    ): array {
         $userId = intval($userId);
         $delegatableGroups = [];
 
-        if($ignoreOrganisationUnit) {
+        if ($ignoreOrganisationUnit) {
             $select = 'SELECT delg.uid_foreign';
             $from = ' FROM be_groups INNER JOIN tx_groupdelegation_subadmin_begroups_mm delg ON be_groups.uid = delg.uid_local';
             $where = ' WHERE delg.uid_local IN (' . $groupsSqlString . ')';
@@ -161,8 +154,8 @@ class GroupDelegationUtility
             $where .= ' AND delg.uid_local IN (' . $groupsSqlString . ')';
             if (!$canActivateUsers) {
                 $where .= ' AND be_users.disable = 0';
-                $where .= ' AND (be_users.starttime < ' . $GLOBALS["EXEC_TIME"] . ' OR be_users.starttime = 0)';
-                $where .= ' AND (be_users.endtime > ' . $GLOBALS["EXEC_TIME"]. ' OR be_users.endtime = 0)';
+                $where .= ' AND (be_users.starttime < ' . $GLOBALS['EXEC_TIME'] . ' OR be_users.starttime = 0)';
+                $where .= ' AND (be_users.endtime > ' . $GLOBALS['EXEC_TIME'] . ' OR be_users.endtime = 0)';
             }
             $where .= ' AND be_users.deleted = 0';
             $where .= ' AND tx_groupdelegation_organisationunit.deleted = 0 AND tx_groupdelegation_organisationunit.hidden = 0';
@@ -178,7 +171,7 @@ class GroupDelegationUtility
             $groupBy .
             $orderBy
         );
-        while ($row = $statement->fetch(\PDO::FETCH_ASSOC))  {
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $delegatableGroups[] = $row['uid_foreign'];
         }
         return $delegatableGroups;
@@ -195,19 +188,17 @@ class GroupDelegationUtility
     public static function getSeparatedGroupsOfUser(
         array $delegatableGroups,
         string $currentUserGroupsString = ''
-    ): array
-    {
-
+    ): array {
         $groups = [];
 
-        if($currentUserGroupsString == '') {
+        if ($currentUserGroupsString == '') {
             $currentUserGroupsArray = [];
         } else {
-            $currentUserGroupsArray = explode(',',$currentUserGroupsString);
+            $currentUserGroupsArray = explode(',', $currentUserGroupsString);
         }
 
-        $notDelegatable = array_diff($currentUserGroupsArray,$delegatableGroups);
-        $allGroupIdsForUser = array_merge($notDelegatable,$delegatableGroups);
+        $notDelegatable = array_diff($currentUserGroupsArray, $delegatableGroups);
+        $allGroupIdsForUser = array_merge($notDelegatable, $delegatableGroups);
         $allGroupIdsForUserString = implode(',', array_filter($allGroupIdsForUser));
 
         $queryBuilder = self::getQueryBuilderForTable('be_groups');
@@ -215,14 +206,14 @@ class GroupDelegationUtility
             ->select('uid', 'title')
             ->from('be_groups')
             ->where(
-                $queryBuilder->expr()->in('uid',$allGroupIdsForUserString)
+                $queryBuilder->expr()->in('uid', $allGroupIdsForUserString)
             )
             ->execute();
 
-        while ($row = $statement->fetch(\PDO::FETCH_ASSOC))  {
-            if(in_array($row['uid'],$notDelegatable)) {
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            if (in_array($row['uid'], $notDelegatable)) {
                 $groups['hasNotDelegatable'][$row['uid']] = $row['title'];
-            } elseif(in_array($row['uid'],$currentUserGroupsArray)) {
+            } elseif (in_array($row['uid'], $currentUserGroupsArray)) {
                 $groups['hasDelegatable'][$row['uid']] = $row['title'];
             }
         }
@@ -243,22 +234,23 @@ class GroupDelegationUtility
         int $userId,
         array $delegatableGroups,
         array $shouldBeDelegated,
-        array $enableFields)
+        array $enableFields
+    )
     {
-        $user = GroupDelegationUtility::getUserDetails($userId);
-        $userGroupsArray = explode(',',$user['usergroup']);
+        $user = self::getUserDetails($userId);
+        $userGroupsArray = explode(',', $user['usergroup']);
         $notDelegatable = array_diff($userGroupsArray, $delegatableGroups);
 
         $saveAllowed = [];
-        if(is_array($shouldBeDelegated)) {
-            foreach($shouldBeDelegated as $shouldGroup) {
-                if(in_array($shouldGroup,$delegatableGroups)) {
+        if (is_array($shouldBeDelegated)) {
+            foreach ($shouldBeDelegated as $shouldGroup) {
+                if (in_array($shouldGroup, $delegatableGroups)) {
                     $saveAllowed[] = $shouldGroup;
                 }
             }
         }
 
-        $doSave = array_merge($notDelegatable,$saveAllowed);
+        $doSave = array_merge($notDelegatable, $saveAllowed);
         $doSave = implode(',', $doSave);
 
         $fields_values = [
@@ -278,11 +270,11 @@ class GroupDelegationUtility
 
         $queryBuilder = self::getQueryBuilderForTable('be_users');
         $queryBuilder->update('be_users')
-            ->where (
+            ->where(
                 $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($userId))
             );
         foreach ($fields_values as $field => $value) {
-            $queryBuilder->set($field,$value);
+            $queryBuilder->set($field, $value);
         }
         $queryBuilder->execute();
     }
@@ -295,16 +287,16 @@ class GroupDelegationUtility
     {
         $user = [];
 
-        $fields = ['uid','username','usergroup','realName','disable','starttime','endtime'];
+        $fields = ['uid', 'username', 'usergroup', 'realName', 'disable', 'starttime', 'endtime'];
         $queryBuilder = self::getQueryBuilderForTable('be_users');
         $statement = $queryBuilder
             ->select(...$fields)
             ->from('be_users')
-            ->where (
+            ->where(
                 $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($userId))
             )
             ->execute();
-        if($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $user = $row;
         }
         return $user;
@@ -318,15 +310,15 @@ class GroupDelegationUtility
     {
         $delegatableGroupsOfUser = [];
 
-        $groupList = implode(',',$delegatableGroups);
+        $groupList = implode(',', $delegatableGroups);
 
-        if(!empty($groupList)) {
+        if (!empty($groupList)) {
             $queryBuilder = self::getQueryBuilderForTable('be_groups');
             $statement = $queryBuilder
                 ->select('uid', 'title')
                 ->from('be_groups')
                 ->where(
-                    $queryBuilder->expr()->in('uid',$groupList)
+                    $queryBuilder->expr()->in('uid', $groupList)
                 )->execute();
 
             while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {

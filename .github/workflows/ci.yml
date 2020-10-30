@@ -29,8 +29,12 @@ jobs:
           git checkout composer.json
 
       - name: Run php linter
-        run: composer ci:php_lint
+        run: composer ci:php:lint
+
+      - name: Run php-cs-fixer
+        run: composer ci:php:php-cs-fixer
 
       - name: Run phpstan
         run: composer ci:php:phpstan
+
 

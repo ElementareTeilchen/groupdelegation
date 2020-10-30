@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace In2code\Groupdelegation\ViewHelpers;
 
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
