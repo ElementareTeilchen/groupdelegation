@@ -28,6 +28,9 @@ jobs:
           composer require typo3/cms-core:${{ matrix.typo3 }} --no-progress
           git checkout composer.json
 
+      - name: Run php linter
+        run: composer ci:php_lint
+
       - name: Run phpstan
         run: composer ci:php:phpstan
 

@@ -17,4 +17,6 @@ Resources/Private/Build/node_modules/
 node_modules/
 
 composer.lock
-.Build
+.build
+.phplint.cache
+.php_cs.cache
