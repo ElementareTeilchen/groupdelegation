@@ -35,22 +35,22 @@
     "friendsoftypo3/phpstan-typo3": "^0.5.0"
   },
   "config": {
-    "vendor-dir": ".Build/vendor",
-    "bin-dir": ".Build/bin"
+    "vendor-dir": ".build/vendor",
+    "bin-dir": ".build/bin"
   },
   "extra": {
     "typo3/cms": {
       "extension-key": "groupdelegation",
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "app-dir": ".Build",
-      "web-dir": ".Build/public"
+      "app-dir": ".build",
+      "web-dir": ".build/public"
     }
   },
   "scripts": {
-    "ci:php:phpstan": ".Build/bin/phpstan analyse",
+    "ci:php:phpstan": ".build/bin/phpstan analyse",
     "post-autoload-dump": [
-      "mkdir -p .Build/public/typo3conf/ext/",
-      "[ -L .Build/public/typo3conf/ext/groupdelegation ] || ln -snvf ../../../../. .Build/public/typo3conf/ext/groupdelegation"
+      "mkdir -p .build/public/typo3conf/ext/",
+      "[ -L .build/public/typo3conf/ext/groupdelegation ] || ln -snvf ../../../../. .build/public/typo3conf/ext/groupdelegation"
     ]
   }
 }
