@@ -28,5 +28,22 @@
   "replace": {
     "groupdelegation": "self.version",
     "typo3-ter/groupdelegation": "self.version"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^0.12.52",
+    "phpstan/extension-installer": "^1.0",
+    "friendsoftypo3/phpstan-typo3": "^0.5.0"
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin"
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "groupdelegation",
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "app-dir": ".Build",
+      "web-dir": ".Build/public"
+    }
   }
 }
