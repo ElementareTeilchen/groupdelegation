@@ -17,3 +17,4 @@ Resources/Private/Build/node_modules/
 node_modules/
 
 composer.lock
+.Build
