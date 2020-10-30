@@ -45,5 +45,12 @@
       "app-dir": ".Build",
       "web-dir": ".Build/public"
     }
+  },
+  "scripts": {
+    "ci:php:phpstan": ".Build/bin/phpstan analyse",
+    "post-autoload-dump": [
+      "mkdir -p .Build/public/typo3conf/ext/",
+      "[ -L .Build/public/typo3conf/ext/groupdelegation ] || ln -snvf ../../../../. .Build/public/typo3conf/ext/groupdelegation"
+    ]
   }
 }
