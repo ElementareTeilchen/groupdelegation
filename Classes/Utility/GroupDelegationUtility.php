@@ -288,7 +288,7 @@ class GroupDelegationUtility
     }
 
     /**
-     * @param $userId
+     * @param int $userId
      * @return array
      */
     public static function getUserDetails(int $userId): array
@@ -311,7 +311,7 @@ class GroupDelegationUtility
     }
 
     /**
-     * @param $delegatableGroups
+     * @param array $delegatableGroups
      * @return array
      */
     public static function getDelegatableGroupsOfUser(array $delegatableGroups): array

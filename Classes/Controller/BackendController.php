@@ -164,12 +164,13 @@ class BackendController extends ActionController
     /**
      * @throws NoSuchArgumentException
      * @throws StopActionException
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function saveAction()
     {
         $userId = intval($this->request->getArgument('user'));
         $shouldBeDelegated = (array)$this->request->getArgument('groups');
-
+        $allowed = false;
         [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
         if ($isSubAdmin) {
