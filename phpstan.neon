@@ -1,5 +1,5 @@
 includes:
-    - .Build/vendor/friendsoftypo3/phpstan-typo3/extension.neon
+    - .build/vendor/friendsoftypo3/phpstan-typo3/extension.neon
 
 parameters:
   level: 5
