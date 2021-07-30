@@ -15,13 +15,10 @@ return [
         ],
         'iconfile' => 'EXT:groupdelegation/Resources/Public/Images/sitemap.svg',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden,title'
-    ],
     'columns' => [
         'hidden' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
                 'default' => '0'
