@@ -13,6 +13,16 @@ unit marketing.
 
 For a detailed manual have a look at the Documentation folder.
 
+## Support
+This TYPO3 Extension is free to use. We as in2code and our Developers highly appreciate your feedback and work hard to improve our Extensions. 
+To do so, in2code provides two extra days per month for coding and developing (codingnight and feaky friday) During these days our more than 20 Developers spend their time with impovments and updates for this and other Extensions.
+
+You can Support our Work here: [Extensionsupport](https://www.in2code.de/extensionsupport)
+
+Thank you very much in advance.
+
+Your in2code Team
+
 ## Screens
 
 <img src="https://docs.typo3.org/typo3cms/extensions/groupdelegation/_images/subadmin_menu.png" />
