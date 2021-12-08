@@ -83,6 +83,7 @@ class GroupDelegationUtility
 			INNER JOIN be_users ON tx_groupdelegation_beusers_organisationunit_mm.uid_local = be_users.uid';
         $where =  ' WHERE be_groups.uid in (' . $groupsSqlString . ') ';
         $where .= ' AND be_users.admin = 0';
+        $where .= ' AND be_users.deleted = 0';
         $where .= ' AND tx_groupdelegation_organisationunit.hidden = 0 AND tx_groupdelegation_organisationunit.deleted = 0 ';
         $where .= ' AND be_groups.hidden = 0 AND be_groups.deleted = 0';
         if (!$canActivateUsers) {
@@ -111,7 +112,10 @@ class GroupDelegationUtility
         return $queryBuilder
             ->select('uid', 'username', 'usergroup', 'realName')
             ->from('be_users')
-            ->where($queryBuilder->expr()->eq('admin', 0))
+            ->where(
+                $queryBuilder->expr()->eq('admin', 0),
+                $queryBuilder->expr()->eq('deleted', 0)
+            )
             ->orderBy('username')
             ->execute()
             ->fetchAll(FetchMode::ASSOCIATIVE);
