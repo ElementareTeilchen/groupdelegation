@@ -1,3 +1,7 @@
+# NOTICE: After initially creating this extension and later giving it over to in2code we have it back again in our responsibility.
+Thanks to in2code for the good collaboration in the last years.
+We are currently working to make this extension fit for TYPO3 12, stay tuned.
+
 # TYPO3 Extension groupdelegation
 
 Allow editors with extended rights to set group rights for other editors.
@@ -14,14 +18,7 @@ unit marketing.
 For a detailed manual have a look at the Documentation folder.
 
 ## Support
-This TYPO3 Extension is free to use. We as in2code and our Developers highly appreciate your feedback and work hard to improve our Extensions. 
-To do so, in2code provides two extra days per month for coding and developing (codingnight and feaky friday) During these days our more than 20 Developers spend their time with impovments and updates for this and other Extensions.
-
-You can Support our Work here: [Extensionsupport](https://www.in2code.de/extensionsupport)
-
-Thank you very much in advance.
-
-Your in2code Team
+This TYPO3 Extension is free to use. We as TUM TYPO3 Team and elementare teilchen and our Developers highly appreciate your feedback and always try to improve our Extensions. 
 
 ## Screens
 
@@ -50,8 +47,3 @@ be available in older versions they must be cherry picked from the main branch.
 EXT:groupdelegation follows the semantic versioning.
 
 V8 compatible releases are tagged with `3.x.y`. V10 compatible releases are tagged with `4.y.x`.                                   |
-
-## Support or help
-
-* Do you want to contribute? Just do a pull request on github
-* Do you need help? Just contact Marcus at https://www.in2code.de
