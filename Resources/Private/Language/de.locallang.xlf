@@ -19,7 +19,7 @@
                 <target state="translated">Backend-Gruppen zuweisen (nicht-Administratoren)</target>
             </trans-unit>
 
-            <trans-unit id="In2code.groupdelegation">
+            <trans-unit id="ElementareTeilchen.groupdelegation">
                 <source>Groupdelegation</source>
                 <target state="translated">Gruppendelegation</target>
             </trans-unit>

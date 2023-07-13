@@ -1,5 +1,8 @@
 <?php
+
 declare(strict_types=1);
+
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 $tempColumns = [
     'tx_groupdelegation_delegateable' => [
@@ -38,7 +41,7 @@ $tempColumns = [
 ];
 
 $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['groupdelegation'];
-if (isset($extConf['ignoreOrganisationUnit']) && $extConf['ignoreOrganisationUnit']==0) {
+if (isset($extConf['ignoreOrganisationUnit']) && $extConf['ignoreOrganisationUnit'] == 0) {
     $tempColumns['tx_groupdelegation_organisationunit'] = [
         'exclude' => 1,
         'l10n_mode' => 'exclude',
@@ -57,14 +60,14 @@ if (isset($extConf['ignoreOrganisationUnit']) && $extConf['ignoreOrganisationUni
     ];
 }
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('be_groups', $tempColumns);
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('be_groups', 'tx_groupdelegation_issubadmingroup');
+ExtensionManagementUtility::addTCAcolumns('be_groups', $tempColumns);
+ExtensionManagementUtility::addToAllTCAtypes('be_groups', 'tx_groupdelegation_issubadmingroup');
 
 $GLOBALS['TCA']['be_groups']['ctrl']['requestUpdate'] = 'tx_groupdelegation_issubadmingroup';
 $GLOBALS['TCA']['be_groups']['ctrl']['typeicon_column'] = 'tx_groupdelegation_issubadmingroup';
 $GLOBALS['TCA']['be_groups']['ctrl']['typeicon_classes']['1'] = 'extensions-groupdelegation-subadmin-group';
 
-$GLOBALS['TCA']['be_groups']['types']['0']['subtype_value_field']= 'tx_groupdelegation_issubadmingroup';
+$GLOBALS['TCA']['be_groups']['types']['0']['subtype_value_field'] = 'tx_groupdelegation_issubadmingroup';
 $GLOBALS['TCA']['be_groups']['types']['0']['subtypes_addlist']['1'] = 'tx_groupdelegation_canactivate,tx_groupdelegation_delegateable,tx_groupdelegation_organisationunit';
-$GLOBALS['TCA']['be_groups']['types']['1']['subtype_value_field']='tx_groupdelegation_issubadmingroup';
+$GLOBALS['TCA']['be_groups']['types']['1']['subtype_value_field'] = 'tx_groupdelegation_issubadmingroup';
 $GLOBALS['TCA']['be_groups']['types']['1']['subtypes_addlist']['1'] = 'tx_groupdelegation_canactivate,tx_groupdelegation_delegateable,tx_groupdelegation_organisationunit';

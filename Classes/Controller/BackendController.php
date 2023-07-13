@@ -1,6 +1,8 @@
 <?php
+
 declare(strict_types=1);
-namespace In2code\Groupdelegation\Controller;
+
+namespace ElementareTeilchen\Groupdelegation\Controller;
 
 /***************************************************************
  *  Copyright notice
@@ -26,10 +28,15 @@ namespace In2code\Groupdelegation\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use In2code\Groupdelegation\Utility\GroupDelegationUtility;
+use Psr\Http\Message\ResponseInterface;
+use ElementareTeilchen\Groupdelegation\Utility\GroupDelegationUtility;
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
+use TYPO3\CMS\Backend\Attribute\Controller;
 
 /**
  * BackendController
@@ -37,37 +44,24 @@ use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  *
  */
-class BackendController extends ActionController
+#[Controller]
+final class BackendController extends ActionController
 {
-    /**
-     * @var bool
-     */
-    protected $ignoreOrganisationUnit = true;
+    protected bool $ignoreOrganisationUnit = true;
+    protected bool $editableStartStopTime = false;
 
-    /**
-     * @var bool
-     */
-    protected $editableStartStopTime = false;
-
-    /**
-     * @return void
-     */
-    public function initializeAction(): void
-    {
-        $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['groupdelegation'];
-        if (isset($extConf['ignoreOrganisationUnit'])) {
-            $this->ignoreOrganisationUnit = boolval($extConf['ignoreOrganisationUnit']);
-        }
-        if (isset($extConf['editableStartStopTime'])) {
-            $this->editableStartStopTime = boolval($extConf['editableStartStopTime']);
-        }
+    public function __construct(
+        private readonly ModuleTemplateFactory $moduleTemplateFactory,
+        private readonly array $groupdelegationExtensionConfiguration,
+    ) {
+        $this->ignoreOrganisationUnit = (bool)($groupdelegationExtensionConfiguration['ignoreOrganisationUnit'] ?? false);
+        $this->editableStartStopTime = (bool)($groupdelegationExtensionConfiguration['editableStartStopTime'] ?? false);
     }
 
-    /**
-     * @return void
-     */
-    public function indexAction(): void
+    public function indexAction(): ResponseInterface
     {
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+
         [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
         if ($isSubAdmin) {
@@ -88,28 +82,25 @@ class BackendController extends ActionController
                 $userCounter++;
             }
 
-            $this->view->assignMultiple([
+            $moduleTemplate->assignMultiple([
                 'users'=> $editableUsers,
                 'isSubAdmin' => '1',
                 'canActivateUsers' => $canActivateUsers,
                 'editableStartStopTime' => $this->editableStartStopTime,
             ]);
         } else {
-            $this->view->assign('isSubAdmin', '0');
+            $moduleTemplate->assign('isSubAdmin', '0');
         }
+
+        return $moduleTemplate->renderResponse('Backend/Index');
     }
 
     /**
      * @throws NoSuchArgumentException
      */
-    public function editAction()
+    public function editAction(int $userId): ResponseInterface
     {
-        if ($this->request->hasArgument('user')) {
-            $userId = intval($this->request->getArgument('user'));
-        } else {
-            $userId = 0;
-        }
-
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
         $allowedToEditUser = false;
@@ -148,7 +139,7 @@ class BackendController extends ActionController
 
                 $delegatableGroupsOfUser = GroupDelegationUtility::getDelegatableGroupsOfUser($delegatableGroups);
 
-                $this->view->assignMultiple([
+                $moduleTemplate->assignMultiple([
                     'isSubAdmin' => '1',
                     'canActivateUsers' => $canActivateUsers,
                     'editableStartStopTime' => $this->editableStartStopTime,
@@ -159,57 +150,53 @@ class BackendController extends ActionController
                 ]);
             }
         } else {
-            $this->view->assign('isSubAdmin', '0');
+            $moduleTemplate->assign('isSubAdmin', '0');
         }
+        return $moduleTemplate->renderResponse('Backend/Edit');
+
     }
 
-    /**
-     * @throws NoSuchArgumentException
-     * @throws StopActionException
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function saveAction()
+    public function saveAction(int $userId, array $groups): ResponseInterface
     {
-        $userId = intval($this->request->getArgument('user'));
-        $shouldBeDelegated = (array)$this->request->getArgument('groups');
         $allowed = false;
         [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
-        if ($isSubAdmin) {
-            $editableUsers =
-                GroupDelegationUtility::getEditableUsers(
-                    $groupIdList,
-                    $this->ignoreOrganisationUnit,
-                    $canActivateUsers
-                );
-            foreach ($editableUsers as $user) {
-                if ($user['uid'] == $userId) {
-                    $allowed = true;
-                    break;
-                }
-            }
-
-            if ($allowed == true) {
-                $enableFields = [];
-                if ($canActivateUsers) {
-                    $enableFields['disable'] = $this->request->getArgument('disable');
-                    if ($this->editableStartStopTime) {
-                        $enableFields['starttime'] = intval(strtotime($this->request->getArgument('starttime')));
-                        $enableFields['endtime'] = intval(strtotime($this->request->getArgument('endtime')));
-                    }
-                }
-
-                $delegatableGroups = GroupDelegationUtility::getDelegatableGroups(
-                    $userId,
-                    $groupIdList,
-                    $this->ignoreOrganisationUnit,
-                    $canActivateUsers
-                );
-
-                GroupDelegationUtility::saveUser($userId, $delegatableGroups, $shouldBeDelegated, $enableFields);
-            }
-            // @extensionScannerIgnoreLine
-            $this->redirect('index');
+        if (!$isSubAdmin) {
+            throw new \Exception('You are not allowed to save the user.');
         }
+
+        $editableUsers =
+            GroupDelegationUtility::getEditableUsers(
+                $groupIdList,
+                $this->ignoreOrganisationUnit,
+                $canActivateUsers
+            );
+        foreach ($editableUsers as $user) {
+            if ($user['uid'] == $userId) {
+                $allowed = true;
+                break;
+            }
+        }
+
+        if ($allowed) {
+            $enableFields = [];
+            if ($canActivateUsers) {
+                $enableFields['disable'] = $this->request->getArgument('disable');
+                if ($this->editableStartStopTime) {
+                    $enableFields['starttime'] = intval(strtotime($this->request->getArgument('starttime')));
+                    $enableFields['endtime'] = intval(strtotime($this->request->getArgument('endtime')));
+                }
+            }
+
+            $delegatableGroups = GroupDelegationUtility::getDelegatableGroups(
+                $userId,
+                $groupIdList,
+                $this->ignoreOrganisationUnit,
+                $canActivateUsers
+            );
+
+            GroupDelegationUtility::saveUser($userId, $delegatableGroups, $groups, $enableFields);
+        }
+        return $this->redirect('index');
     }
 }

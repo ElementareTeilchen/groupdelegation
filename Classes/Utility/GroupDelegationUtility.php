@@ -1,28 +1,22 @@
 <?php
-declare(strict_types=1);
-namespace In2code\Groupdelegation\Utility;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\FetchMode;
+declare(strict_types=1);
+
+namespace ElementareTeilchen\Groupdelegation\Utility;
+
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * Class GroupDelegationUtility
- *
- */
 class GroupDelegationUtility
 {
-
     /**
      * Checks whether
      * - the current be user is part of a sub-admin-group,
      * - is allowed to enable and disable users,
      * and returns this info plus a list of all sub-admin-groups, which the BE user belongs to
-     *
-     * @return array
      */
     public static function getSubadminStatus(): array
     {
@@ -33,28 +27,21 @@ class GroupDelegationUtility
         $canActivateUsers = false;
 
         foreach ($GLOBALS['BE_USER']->userGroups as $singleGroup) {
-            if ($singleGroup['tx_groupdelegation_issubadmingroup']=== 1) {
+            if ($singleGroup['tx_groupdelegation_issubadmingroup'] === 1) {
                 $isSubAdmin = true;
-                if ($singleGroup['tx_groupdelegation_canactivate']=== 1) {
+                if ($singleGroup['tx_groupdelegation_canactivate'] === 1) {
                     $canActivateUsers = true;
                 }
-                $groupId[] =  $singleGroup['uid'];
+                $groupId[] = $singleGroup['uid'];
             }
         }
-        if ($isSubAdmin===true) {
+        if ($isSubAdmin) {
             $groupsSqlString = implode(',', $groupId);
         }
 
         return [$isSubAdmin, $canActivateUsers, $groupsSqlString];
     }
 
-    /**
-     * @param string $groupsSqlString
-     * @param bool $ignoreOrganisationUnit
-     * @param bool $canActivateUsers
-     * @return array
-     * @throws DBALException
-     */
     public static function getEditableUsers(
         string $groupsSqlString,
         bool $ignoreOrganisationUnit,
@@ -68,12 +55,6 @@ class GroupDelegationUtility
         return $editableUsers;
     }
 
-    /**
-     * @param bool $canActivateUsers
-     * @param string $groupsSqlString
-     * @return array
-     * @throws DBALException
-     */
     private static function getEditableUsersRespectOU(bool $canActivateUsers, string $groupsSqlString): array
     {
         $select = 'SELECT be_users.uid,be_users.username,be_users.usergroup,be_users.realName ';
@@ -88,24 +69,21 @@ class GroupDelegationUtility
         $where .= ' AND be_groups.hidden = 0 AND be_groups.deleted = 0';
         if (!$canActivateUsers) {
             $where .= ' AND be_users.disable = 0';
-            $where .= ' AND (be_users.starttime < ' . $GLOBALS['EXEC_TIME'] . ' OR be_users.starttime = 0)';
-            $where .= ' AND (be_users.endtime > ' . $GLOBALS['EXEC_TIME'] . ' OR be_users.endtime = 0)';
+            $where .= ' AND (be_users.starttime < ' . GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') . ' OR be_users.starttime = 0)';
+            $where .= ' AND (be_users.endtime > ' . GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') . ' OR be_users.endtime = 0)';
         }
         $groupBy = ' GROUP BY be_users.uid ';
         $orderBy = ' ORDER BY be_users.username ';
 
-        return $rows = self::getConnection('be_groups')->executeQuery(
+        return self::getConnection('be_groups')->executeQuery(
             $select .
             $from .
             $where .
             $groupBy .
             $orderBy
-        )->fetchAll(FetchMode::ASSOCIATIVE);
+        )->fetchAllAssociative();
     }
 
-    /**
-     * @return array
-     */
     private static function getEditableUsersIgnoreOU(): array
     {
         $queryBuilder = self::getQueryBuilderForTable('be_users');
@@ -117,19 +95,12 @@ class GroupDelegationUtility
                 $queryBuilder->expr()->eq('deleted', 0)
             )
             ->orderBy('username')
-            ->execute()
-            ->fetchAll(FetchMode::ASSOCIATIVE);
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 
     /**
      * Sets instance variable delegatableGroups to an array of all delegatable groups from sub admin to $userId
-     *
-     * @param int $userId
-     * @param string $groupsSqlString
-     * @param bool $ignoreOrganisationUnit
-     * @param bool $canActivateUsers
-     * @return array
-     * @throws DBALException
      */
     public static function getDelegatableGroups(
         int $userId,
@@ -137,7 +108,6 @@ class GroupDelegationUtility
         bool $ignoreOrganisationUnit = true,
         bool $canActivateUsers = false
     ): array {
-        $userId = intval($userId);
         $delegatableGroups = [];
 
         if ($ignoreOrganisationUnit) {
@@ -158,8 +128,8 @@ class GroupDelegationUtility
             $where .= ' AND delg.uid_local IN (' . $groupsSqlString . ')';
             if (!$canActivateUsers) {
                 $where .= ' AND be_users.disable = 0';
-                $where .= ' AND (be_users.starttime < ' . $GLOBALS['EXEC_TIME'] . ' OR be_users.starttime = 0)';
-                $where .= ' AND (be_users.endtime > ' . $GLOBALS['EXEC_TIME'] . ' OR be_users.endtime = 0)';
+                $where .= ' AND (be_users.starttime < ' . GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') . ' OR be_users.starttime = 0)';
+                $where .= ' AND (be_users.endtime > ' . GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') . ' OR be_users.endtime = 0)';
             }
             $where .= ' AND be_users.deleted = 0';
             $where .= ' AND tx_groupdelegation_organisationunit.deleted = 0 AND tx_groupdelegation_organisationunit.hidden = 0';
@@ -175,7 +145,7 @@ class GroupDelegationUtility
             $groupBy .
             $orderBy
         );
-        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+        while ($row = $statement->fetchAssociative()) {
             $delegatableGroups[] = $row['uid_foreign'];
         }
         return $delegatableGroups;
@@ -183,11 +153,6 @@ class GroupDelegationUtility
 
     /**
      * Builds an array with a string of all delegatable and a string of all not delegatable groups
-     *
-     * @param array $delegatableGroups
-     * @param string $currentUserGroupsString
-     * @return array
-     * @throws DBALException
      */
     public static function getSeparatedGroupsOfUser(
         array $delegatableGroups,
@@ -208,13 +173,9 @@ class GroupDelegationUtility
         $queryBuilder = self::getQueryBuilderForTable('be_groups');
         $statement = $queryBuilder
             ->select('uid', 'title')
-            ->from('be_groups')
-            ->where(
-                $queryBuilder->expr()->in('uid', $allGroupIdsForUserString)
-            )
-            ->execute();
+            ->from('be_groups')->where($queryBuilder->expr()->in('uid', $allGroupIdsForUserString))->executeQuery();
 
-        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+        while ($row = $statement->fetchAssociative()) {
             if (in_array($row['uid'], $notDelegatable)) {
                 $groups['hasNotDelegatable'][$row['uid']] = $row['title'];
             } elseif (in_array($row['uid'], $currentUserGroupsArray)) {
@@ -239,18 +200,15 @@ class GroupDelegationUtility
         array $delegatableGroups,
         array $shouldBeDelegated,
         array $enableFields
-    )
-    {
+    ) {
         $user = self::getUserDetails($userId);
         $userGroupsArray = explode(',', $user['usergroup']);
         $notDelegatable = array_diff($userGroupsArray, $delegatableGroups);
 
         $saveAllowed = [];
-        if (is_array($shouldBeDelegated)) {
-            foreach ($shouldBeDelegated as $shouldGroup) {
-                if (in_array($shouldGroup, $delegatableGroups)) {
-                    $saveAllowed[] = $shouldGroup;
-                }
+        foreach ($shouldBeDelegated as $shouldGroup) {
+            if (in_array($shouldGroup, $delegatableGroups)) {
+                $saveAllowed[] = $shouldGroup;
             }
         }
 
@@ -280,13 +238,9 @@ class GroupDelegationUtility
         foreach ($fields_values as $field => $value) {
             $queryBuilder->set($field, $value);
         }
-        $queryBuilder->execute();
+        $queryBuilder->executeStatement();
     }
 
-    /**
-     * @param int $userId
-     * @return array
-     */
     public static function getUserDetails(int $userId): array
     {
         $user = [];
@@ -295,21 +249,13 @@ class GroupDelegationUtility
         $queryBuilder = self::getQueryBuilderForTable('be_users');
         $statement = $queryBuilder
             ->select(...$fields)
-            ->from('be_users')
-            ->where(
-                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($userId))
-            )
-            ->execute();
-        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            ->from('be_users')->where($queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($userId)))->executeQuery();
+        if ($row = $statement->fetchAssociative()) {
             $user = $row;
         }
         return $user;
     }
 
-    /**
-     * @param array $delegatableGroups
-     * @return array
-     */
     public static function getDelegatableGroupsOfUser(array $delegatableGroups): array
     {
         $delegatableGroupsOfUser = [];
@@ -320,22 +266,15 @@ class GroupDelegationUtility
             $queryBuilder = self::getQueryBuilderForTable('be_groups');
             $statement = $queryBuilder
                 ->select('uid', 'title')
-                ->from('be_groups')
-                ->where(
-                    $queryBuilder->expr()->in('uid', $groupList)
-                )->execute();
+                ->from('be_groups')->where($queryBuilder->expr()->in('uid', $groupList))->executeQuery();
 
-            while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            while ($row = $statement->fetchAssociative()) {
                 $delegatableGroupsOfUser[$row['uid']] = $row['title'];
             }
         }
         return $delegatableGroupsOfUser;
     }
 
-    /**
-     * @param string $table
-     * @return QueryBuilder
-     */
     private static function getQueryBuilderForTable(string $table): QueryBuilder
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -344,10 +283,6 @@ class GroupDelegationUtility
         return $queryBuilder;
     }
 
-    /**
-     * @param string $table
-     * @return Connection
-     */
     protected static function getConnection(string $table): Connection
     {
         return GeneralUtility::makeInstance(ConnectionPool::class)

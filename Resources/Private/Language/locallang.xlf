@@ -13,7 +13,7 @@
                 <source>Delegating Backend Groups</source>
             </trans-unit>
 
-            <trans-unit id="In2code.groupdelegation">
+            <trans-unit id="ElementareTeilchen.groupdelegation">
                 <source>Groupdelegation</source>
             </trans-unit>
             <trans-unit id="tx_groupdelegation.title">

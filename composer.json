@@ -1,7 +1,8 @@
 {
-  "name": "in2code/groupdelegation",
+  "name": "elementareteilchen/groupdelegation",
   "type": "typo3-cms-extension",
   "description": "Allows generating Sub-Admin be_user by groups which can handle access of other be_user by groups",
+  "version": "5.0.0",
   "license": "GPL-2.0-or-later",
   "authors": [
     {
@@ -15,45 +16,26 @@
     {
       "name": "Andreas Sommer",
       "role": "Developer"
-    }
+    },
+      {
+          "name": "Franz Kugelmann",
+          "role": "Developer"
+      }
   ],
   "require": {
-    "typo3/cms-core": "^10.4"
+    "typo3/cms-core": "^12.4"
   },
   "autoload": {
     "psr-4": {
-      "In2code\\Groupdelegation\\": "Classes"
+      "ElementareTeilchen\\Groupdelegation\\": "Classes"
     }
   },
   "replace": {
     "typo3-ter/groupdelegation": "self.version"
   },
-  "require-dev": {
-    "phpstan/phpstan": "^0.12.52",
-    "phpstan/extension-installer": "^1.0",
-    "friendsoftypo3/phpstan-typo3": "^0.5.0",
-    "overtrue/phplint": "^2.1",
-    "friendsofphp/php-cs-fixer": "^2.16"
-  },
-  "config": {
-    "vendor-dir": ".build/vendor",
-    "bin-dir": ".build/bin"
-  },
   "extra": {
     "typo3/cms": {
-      "extension-key": "groupdelegation",
-      "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "app-dir": ".build",
-      "web-dir": ".build/public"
+      "extension-key": "groupdelegation"
     }
-  },
-  "scripts": {
-    "ci:php:lint": "phplint",
-    "ci:php:phpstan": ".build/bin/phpstan analyse",
-    "ci:php:php-cs-fixer": " .build/bin/php-cs-fixer --diff -v fix",
-    "post-autoload-dump": [
-      "mkdir -p .build/public/typo3conf/ext/",
-      "[ -L .build/public/typo3conf/ext/groupdelegation ] || ln -snvf ../../../../. .build/public/typo3conf/ext/groupdelegation"
-    ]
   }
 }

@@ -2,22 +2,20 @@
 	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
 	  xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers">
 
-<f:layout name="Backend" />
+<f:layout name="Module" />
 
-<f:section name="content">
-
-
+<f:section name="Content">
+    <f:asset.css identifier="gd-css" href="EXT:groupdelegation/Resources/Public/Css/backend.css"/>
     <div id="groupdelegation-overlay">
     <h1><f:translate key="tx_groupdelegation.title" /></h1>
-    <f:if condition="{isSubAdmin}==1">
+    <f:if condition="{isSubAdmin}">
         <f:then>
-
             <h2><f:translate key="tx_groupdelegation.userlisting"/></h2>
 
             <table class="userlist-groupdelegation">
                 <thead>
                     <tr class="head-line">
-                        <th >&nbsp;&nbsp;</th>
+                        <th>&nbsp;&nbsp;</th>
                         <th class="username"><f:translate key="tx_groupdelegation.username" /> </th>
                         <th class="name"><f:translate key="tx_groupdelegation.realname" /></th>
                         <th class="allowed"><f:translate key="tx_groupdelegation.overview_delegatable" /></th>
@@ -28,12 +26,12 @@
                     <f:for each="{users}" as="user">
                         <tr>
                             <td>
-                                <f:link.action action="edit" controller="Backend" arguments="{user: user.uid}">
-                                    <be:avatar backendUser="{user.uid}" showIcon="TRUE" />
+                                <f:link.action action="edit" controller="Backend" arguments="{userId: user.uid}">
+                                    <be:avatar backendUser="{user.uid}" showIcon="1" />
                                 </f:link.action>
                             </td>
                             <td class="username">
-                                <f:link.action action="edit" controller="Backend" arguments="{user: user.uid}">{user.username}</f:link.action>
+                                <f:link.action action="edit" controller="Backend" arguments="{userId: user.uid}">{user.username}</f:link.action>
                             </td>
                             <td class="name">
                                 {user.realName}
@@ -41,11 +39,13 @@
                             <td class="not-allowed">
                                 <f:for each="{user.groups.hasDelegatable}" as="group">
                                     {group}<br />
-                                </f:for></td>
+                                </f:for>
+                            </td>
                             <td class="allowed">
                                 <f:for each="{user.groups.hasNotDelegatable}" as="group">
                                     {group}<br />
-                                </f:for></td>
+                                </f:for>
+                            </td>
                         </tr>
                     </f:for>
                 </tbody>

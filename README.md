@@ -1,6 +1,6 @@
 # NOTICE: After initially creating this extension and later giving it over to in2code we have it back again in our responsibility.
 Thanks to in2code for the good collaboration in the last years.
-We are currently working to make this extension fit for TYPO3 12 and in this process will switch to the PHP namespace TUM, stay tuned.
+We are currently using this extension with TYPO3 v12, if you need it for v11, please contact us.
 
 # TYPO3 Extension groupdelegation
 
@@ -44,8 +44,8 @@ be available in older versions they must be cherry picked from the main branch.
 
 ### Version numbers
 
-EXT:groupdelegation follows the semantic versioning.
+EXT:groupdelegation follows the semantic versioning.  
+Compatibility:
 
-V8 compatible releases are tagged with `3.x.y`.  
-V10 compatible releases are tagged with `4.y.x`.  
-V12 compatible releases are tagged with `5.y.x`.
+10 LTS: `v4.y.x`  
+12 LTS: `v5.y.x`

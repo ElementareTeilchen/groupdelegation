@@ -1,19 +1,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en"
 	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
 	  xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
-	  xmlns:gd="http://typo3.org/ns/In2code/Groupdelegation/ViewHelpers">
+	  xmlns:gd="http://typo3.org/ns/ElementareTeilchen/Groupdelegation/ViewHelpers">
 
-<f:layout name="Backend" />
+<f:layout name="Module" />
 
-<f:section name="content">
-
+<f:section name="Content">
+    <f:asset.css identifier="gd-css" href="EXT:groupdelegation/Resources/Public/Css/backend.css"/>
     <div id="groupdelegation-overlay">
         <h1><f:translate key="tx_groupdelegation.title" /></h1>
 
-        <f:if condition="{isSubAdmin}==1">
+        <f:if condition="{isSubAdmin}">
             <f:then>
-
-                <h3><be:avatar backendUser="{user.uid}" showIcon="TRUE" /> {user.username} - {user.realName} [{user.uid}]</h3>
+                <h3><be:avatar backendUser="{user.uid}" showIcon="1" /> {user.username} - {user.realName} [{user.uid}]</h3>
 
                 <div class="groupdelegation-container">
                         <f:form action="save" controller="Backend" name="editUser">
@@ -33,7 +32,7 @@
                                 </f:if>
                             </f:if>
 
-                            <f:form.hidden name="user" value="{user.uid}"/>
+                            <f:form.hidden name="userId" value="{user.uid}"/>
                             <div class="groupdelegation__delegateable">
                                 <h4><f:translate key="be_groups.tx_groupdelegation_delegatable" /></h4>
                                 <f:for each="{delegatableGroupsOfUser}" as="delgroup" key="delGroupId">

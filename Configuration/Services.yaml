@@ -1,0 +1,18 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+    bind:
+      $groupdelegationExtensionConfiguration: '@extensionconfiguration.groupdelegation'
+
+  ElementareTeilchen\Groupdelegation\:
+    resource: '../Classes/*'
+
+  extensionconfiguration.groupdelegation:
+    class: 'array'
+    factory:
+      - '@TYPO3\CMS\Core\Configuration\ExtensionConfiguration'
+      - 'get'
+    arguments:
+      - 'groupdelegation'

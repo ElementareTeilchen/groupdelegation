@@ -1,13 +1,14 @@
 <?php
+
 declare(strict_types=1);
-namespace In2code\Groupdelegation\ViewHelpers;
+
+namespace ElementareTeilchen\Groupdelegation\ViewHelpers;
 
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class InArrayViewHelper extends AbstractViewHelper
 {
-
     /**
      * Initializes the arguments
      */
