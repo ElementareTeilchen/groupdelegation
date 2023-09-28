@@ -17,10 +17,10 @@
       "name": "Andreas Sommer",
       "role": "Developer"
     },
-      {
-          "name": "Franz Kugelmann",
-          "role": "Developer"
-      }
+    {
+      "name": "Franz Kugelmann",
+      "role": "Developer"
+    }
   ],
   "require": {
     "typo3/cms-core": "^12.4"
