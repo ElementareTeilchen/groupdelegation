@@ -77,7 +77,7 @@ final class BackendController extends ActionController
                 $editableUsers[$userCounter]['groups'] =
                     GroupDelegationUtility::getSeparatedGroupsOfUser(
                         $delegatableGroups,
-                        $user['usergroup']
+                        $user['usergroup'] ?? ''
                     );
                 $userCounter++;
             }
@@ -132,7 +132,7 @@ final class BackendController extends ActionController
                 $groupsSeparated =
                     GroupDelegationUtility::getSeparatedGroupsOfUser(
                         $delegatableGroups,
-                        $user['usergroup']
+                        $user['usergroup'] ?? ''
                     );
 
                 $userGroupsArray = explode(',', $user['usergroup']);
