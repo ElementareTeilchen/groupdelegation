@@ -202,7 +202,7 @@ class GroupDelegationUtility
         array $enableFields
     ) {
         $user = self::getUserDetails($userId);
-        $userGroupsArray = explode(',', $user['usergroup']);
+        $userGroupsArray = explode(',', $user['usergroup'] ?? '');
         $notDelegatable = array_diff($userGroupsArray, $delegatableGroups);
 
         $saveAllowed = [];

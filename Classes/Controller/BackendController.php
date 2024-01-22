@@ -135,7 +135,7 @@ final class BackendController extends ActionController
                         $user['usergroup'] ?? ''
                     );
 
-                $userGroupsArray = explode(',', $user['usergroup']);
+                $userGroupsArray = explode(',', $user['usergroup'] ?? '');
 
                 $delegatableGroupsOfUser = GroupDelegationUtility::getDelegatableGroupsOfUser($delegatableGroups);
 
