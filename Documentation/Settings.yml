@@ -2,14 +2,13 @@
 # Place Sphinx specific build information here.
 # Settings given here will replace the settings of 'conf.py'.
 
----
 conf.py:
   copyright: 2010-2017
   project: Groupdelegation
   version: 3.0
   release: 3.0.0
   latex_documents:
-  - - Index
+    - Index
     - sphinx.tex
     - Groupdelegation
     - Marcus Schwemer (in2code)
@@ -44,4 +43,4 @@ conf.py:
   - sphinxcontrib.googlemaps
   - sphinxcontrib.slide
   - sphinxcontrib.youtube
-...
+
