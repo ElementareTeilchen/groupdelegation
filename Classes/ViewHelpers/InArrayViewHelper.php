@@ -12,7 +12,7 @@ class InArrayViewHelper extends AbstractViewHelper
     /**
      * Initializes the arguments
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('needle', 'string', 'String (aka needle) to look for in the array', true);

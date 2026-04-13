@@ -27,16 +27,12 @@ namespace ElementareTeilchen\Groupdelegation\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use TYPO3\CMS\Backend\Attribute\AsController;
 use Psr\Http\Message\ResponseInterface;
 use ElementareTeilchen\Groupdelegation\Utility\GroupDelegationUtility;
-use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
-use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
-use TYPO3\CMS\Backend\Attribute\Controller;
 
 /**
  * BackendController
@@ -44,7 +40,7 @@ use TYPO3\CMS\Backend\Attribute\Controller;
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  *
  */
-#[Controller]
+#[AsController]
 final class BackendController extends ActionController
 {
     protected bool $ignoreOrganisationUnit = true;
@@ -118,7 +114,7 @@ final class BackendController extends ActionController
                 }
             }
 
-            if ($allowedToEditUser == true) {
+            if ($allowedToEditUser) {
                 $delegatableGroups =
                     GroupDelegationUtility::getDelegatableGroups(
                         $userId,
@@ -162,7 +158,7 @@ final class BackendController extends ActionController
         [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
         if (!$isSubAdmin) {
-            throw new \Exception('You are not allowed to save the user.');
+            throw new \Exception('You are not allowed to save the user.', 1878751855);
         }
 
         $editableUsers =
@@ -183,8 +179,8 @@ final class BackendController extends ActionController
             if ($canActivateUsers) {
                 $enableFields['disable'] = $this->request->getArgument('disable');
                 if ($this->editableStartStopTime) {
-                    $enableFields['starttime'] = intval(strtotime($this->request->getArgument('starttime')));
-                    $enableFields['endtime'] = intval(strtotime($this->request->getArgument('endtime')));
+                    $enableFields['starttime'] = intval(strtotime((string) $this->request->getArgument('starttime')));
+                    $enableFields['endtime'] = intval(strtotime((string) $this->request->getArgument('endtime')));
                 }
             }
 
