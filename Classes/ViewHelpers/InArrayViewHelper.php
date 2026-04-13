@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ElementareTeilchen\Groupdelegation\ViewHelpers;
 
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class InArrayViewHelper extends AbstractViewHelper
@@ -19,19 +18,8 @@ class InArrayViewHelper extends AbstractViewHelper
         $this->registerArgument('haystack', 'array', 'Array (aka haystack), where to look for the needle', true);
     }
 
-    /**
-     * Print icon html for $identifier key
-     *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return bool
-     */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ) {
-        return in_array($arguments['needle'], $arguments['haystack']);
+    public function render(): bool
+    {
+        return in_array($this->arguments['needle'], $this->arguments['haystack']);
     }
 }
