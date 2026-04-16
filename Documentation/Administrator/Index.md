@@ -10,17 +10,17 @@ Go to the directory with the composer configuration (usually project root) and r
 composer require elementareteilchen/groupdelegation
 ```
 
-### Via Extension Manager
-
-Go to the Extension Manager, choose "Get Extensions", search for "groupdelegation" and import and install the extension.
-
 ## Extension Configuration
 
-In the Extension Manager you can set the option **ignoreOrganisationUnit**. If selected, sub-admins are able to
-edit permissions by adding/removing delegatable groups of *every BE user* who is not a TYPO3 admin. The organisation
-units will be ignored.
+Go to **Admin Tools > Settings > Extension Configuration > groupdelegation** to configure the extension.
 
-If you change this setting later, you will have additional work with TYPO3 users and their groups.
+**ignoreOrganisationUnit** (default: enabled)
+
+When enabled, sub-admins can edit permissions for *every* non-admin BE user regardless of organisational unit. This is the default.
+
+When disabled, sub-admins can only manage BE users that belong to the OUs assigned to their sub-admin group. This requires setting up OUs (see below).
+
+If you change this setting later, you will have additional work reassigning TYPO3 users and their groups.
 
 > **Important:** Using this extension, you have to take more care about the organisation of the backend groups because
 > some unforeseen things might be possible. For example: if a user belongs to both the marketing and the human
@@ -31,9 +31,13 @@ If you change this setting later, you will have additional work with TYPO3 users
 
 ### Create Organisational Units (OU)
 
-This step is only necessary if the option "ignoreOrganisationUnit" is **not** set.
+This step is only necessary if **ignoreOrganisationUnit** is disabled.
 
-OUs are set up on the root page of your TYPO3 instance (uid = 0). When creating an OU, you only need to set a title.
+OUs are stored at the root level (PID 0). To create one in TYPO3 v14:
+
+1. Open **Content > Records**
+2. Click the root entry (TYPO3 logo) at the top of the page tree
+3. Create a new **Organisation Unit** record — only a title is required
 
 ![Create OU](../Images/create_ou.png)
 
