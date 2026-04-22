@@ -1,5 +1,6 @@
 msi.iws
 .idea/
+.claude/
 nbproject/
 .DS_Store
 .DS_Store?

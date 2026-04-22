@@ -47,7 +47,7 @@ class GroupDelegationUtility
         bool $ignoreOrganisationUnit,
         bool $canActivateUsers
     ): array {
-        if ($ignoreOrganisationUnit === true) {
+        if ($ignoreOrganisationUnit) {
             $editableUsers = self::getEditableUsersIgnoreOU();
         } else {
             $editableUsers = self::getEditableUsersRespectOU($canActivateUsers, $groupsSqlString);
@@ -160,11 +160,7 @@ class GroupDelegationUtility
     ): array {
         $groups = [];
 
-        if ($currentUserGroupsString == '') {
-            $currentUserGroupsArray = [];
-        } else {
-            $currentUserGroupsArray = explode(',', $currentUserGroupsString);
-        }
+        $currentUserGroupsArray = $currentUserGroupsString == '' ? [] : explode(',', $currentUserGroupsString);
 
         $notDelegatable = array_diff($currentUserGroupsArray, $delegatableGroups);
         $allGroupIdsForUser = array_merge($notDelegatable, $delegatableGroups);
@@ -200,7 +196,7 @@ class GroupDelegationUtility
         array $delegatableGroups,
         array $shouldBeDelegated,
         array $enableFields
-    ) {
+    ): void {
         $user = self::getUserDetails($userId);
         $userGroupsArray = explode(',', $user['usergroup'] ?? '');
         $notDelegatable = array_diff($userGroupsArray, $delegatableGroups);
@@ -262,7 +258,7 @@ class GroupDelegationUtility
 
         $groupList = implode(',', $delegatableGroups);
 
-        if (!empty($groupList)) {
+        if ($groupList !== '' && $groupList !== '0') {
             $queryBuilder = self::getQueryBuilderForTable('be_groups');
             $statement = $queryBuilder
                 ->select('uid', 'title')
