@@ -1,7 +1,7 @@
 #groupdelegation-overlay {
     display: inline-block;
     padding: 20px;
-    background: #fff;
+    background: transparent;
 }
 
 .groupdelegation-container {
@@ -18,12 +18,13 @@
 
 .groupdelegation__disable {
     padding: 10px;
-    background-color: #dfdfdf;
+    border-radius: 8px;
+    background-color: light-dark(#dfdfdf, #555555);
 }
 
 .groupdelegation__disable:hover {
     cursor: pointer;
-    background-color: #cfcfcf;
+    background-color: light-dark(#cfcfcf, #444444);
 }
 
 .groupdelegation__disable:before {
@@ -53,7 +54,9 @@
 
 .groupdelegation__startstop {
     padding: 10px;
-    background-color: #dfdfdf;
+    margin-block: 20px;
+    background-color: light-dark(#dfdfdf, #555555);
+    border-radius: 8px
 }
 .groupdelegation-container input[type="date"] {
     padding: 5px;
@@ -76,8 +79,18 @@
 .groupdelegation__delegateable label {
     display: block;
     padding: 10px;
-    background-color: #dfdfdf;
-    border: 2px solid #dfdfdf;
+    background-color: light-dark(#dfdfdf, #555555);
+    border: 2px solid light-dark(#dfdfdf, #555555);
+}
+
+.groupdelegation__delegateable label:first-of-type {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.groupdelegation__delegateable label:last-of-type {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
 
 .groupdelegation__delegateable label:before {
@@ -92,8 +105,8 @@
 
 .groupdelegation__delegateable label:hover {
     cursor: pointer;
-    background-color: #cfcfcf;
-    border: 2px solid #cfcfcf;
+    background-color: light-dark(#cfcfcf, #444444);
+    border: 2px solid light-dark(#cfcfcf, #444444);
 }
 
 .groupdelegation__delegateable input {
@@ -103,7 +116,7 @@
 }
 
 .groupdelegation__delegateable input:checked + label {
-    border: 2px solid rgba(0,155,0,0.5);
+    border: 2px solid light-dark(rgb(0 155 0 / 50%), rgb(0 175 0 / 50%));
 }
 
 .groupdelegation__delegateable input:checked + label:before {
@@ -118,7 +131,7 @@
 
 .groupdelegation-container .close-link,
 .groupdelegation-container input[type="submit"] {
-    border-radius: 2px;
+    border-radius: 8px;
     color: #fff;
     padding: 10px 16px 10px 30px;
     font-weight: bold;
@@ -129,8 +142,8 @@
 }
 
 .groupdelegation-container .close-link {
-    border: 1px solid rgba(142,144,148,1);
-    background-color: rgba(162,170,184,1);
+    border: 1px solid light-dark(rgb(142 144 148 / 1), oklch(from rgb(142 144 148 / 1) calc(l * .66) c h));
+    background-color: light-dark(rgb(162 170 184 / 1), oklch(from rgb(162 170 184 / 1) calc(l * .66) c h));
     background-image: url("../Images/close-icon.svg");
     float: left;
 }
@@ -157,7 +170,7 @@
 }
 
 .groupdelegation-container .close-link:hover {
-    background-color: rgba(142,144,148,1);
+    background-color: light-dark(rgb(142 144 148 / 1), oklch(from rgb(142 144 148 / 1) calc(l * .66) c h));
 }
 
 .groupdelegation-container input[type="submit"]:hover {
@@ -179,20 +192,26 @@ table.userlist-groupdelegation tr.body-line:hover td {
 .userlist-groupdelegation .not-allowed {width:300px; font-style: italic;}
 
 .userlist-groupdelegation tr:nth-of-type(even) {
-    background-color: #efefef;
+    background-color: light-dark(#efefef, #555);
+    color: contrast-color(light-dark(#efefef, #555));
+}
+
+.userlist-groupdelegation tr:where(:not(:last-child)) {
+    border-bottom: 1px solid light-dark(transparent, grey);
 }
 
 .userlist-groupdelegation .username a,
 .userlist-groupdelegation .name a {
     padding: 10px;
-    background-color: #3070b3;
+    background-color: light-dark(#3070b3, oklch(from #3070b3 calc(l * .66) c h));
     display: block;
     color: #fff;
+    border-radius: 8px;
 }
 
 .userlist-groupdelegation .username a:hover,
 .userlist-groupdelegation .name a:hover {
-    background-color: #598dc2;
+    background-color: light-dark(#598dc2, oklch(from #598dc2 calc(l * .8) c h));
 }
 
 .edit-select-container,
@@ -202,4 +221,3 @@ span.current-user {font-size:14px;}
 span.current-user img {vertical-align:middle;}
 .edit-groups-not-allowed {margin-bottom:20px;font-style: italic;}
 .edit-groups-not-allowed h4 {font-style: normal;}
-
