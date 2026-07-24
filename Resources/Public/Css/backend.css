@@ -176,15 +176,7 @@ table.userlist-groupdelegation tr.body-line:hover td {
     background-color: #ebebeb;
 }
 
-/* .userlist-groupdelegation tr.body-line td {padding: 2px 5px;}
-.userlist-groupdelegation tr.body-line td.uid {padding-left:8px;} */
-
-/*.userlist-groupdelegation .uid {width:30px;}*/
-/*.userlist-groupdelegation .username {width:200px;}*/
-/*.userlist-groupdelegation .name {width:200px;}*/
-/*.userlist-groupdelegation .icon {width:32px; border: none;}*/
 .userlist-groupdelegation .not-allowed {width:300px; font-style: italic;}
-/*.userlist-groupdelegation .allowed {width:300px;}*/
 
 .userlist-groupdelegation tr:nth-of-type(even) {
     background-color: #efefef;
@@ -196,7 +188,6 @@ table.userlist-groupdelegation tr.body-line:hover td {
     background-color: #3070b3;
     display: block;
     color: #fff;
-    /*box-shadow: 0 4px 3px -3px rgba(0,0,0,0.33);*/
 }
 
 .userlist-groupdelegation .username a:hover,
@@ -209,6 +200,6 @@ table.userlist-groupdelegation tr.body-line:hover td {
 .float-container {float:left; margin-right:50px;}
 span.current-user {font-size:14px;}
 span.current-user img {vertical-align:middle;}
-.edit-groups-not-allowed {/*color:#A30904; */margin-bottom:20px;font-style: italic;}
-.edit-groups-not-allowed h4 {/*color:#A30904;*/font-style: normal;}
+.edit-groups-not-allowed {margin-bottom:20px;font-style: italic;}
+.edit-groups-not-allowed h4 {font-style: normal;}
 
