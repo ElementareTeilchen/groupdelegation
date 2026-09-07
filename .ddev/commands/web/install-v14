@@ -32,6 +32,7 @@ composer req typo3/minimal:'^14.3' \
 
 cd /var/www/html/$VERSION
 
+mysql -h db -u root -p"root" -e "DROP DATABASE IF EXISTS ${VERSION};"
 mysql -h db -u root -p"root" -e "CREATE DATABASE ${VERSION};"
 
 vendor/bin/typo3 setup -n --dbname=$VERSION --password=$TYPO3_DB_PASSWORD \
@@ -66,3 +67,17 @@ mutations:
 EOL
 
 vendor/bin/typo3 cache:flush
+
+mysql -u "$TYPO3_DB_USERNAME" -p"$TYPO3_DB_PASSWORD" "$VERSION" <<'EOF'
+INSERT INTO `be_users` (`uid`, `pid`, `tstamp`, `crdate`, `deleted`, `disable`, `tx_groupdelegation_organisationunit`, `username`, `password`, `usergroup`, `realName`, `lang`, `userMods`) VALUES
+(3, 0, 1788779900, 1788779900, 0, 0, 0, 'user-with-groupdelegation', '$argon2i$v=19$m=65536,t=16,p=1$L0J6S09uM2J3TlZRa3hzeQ$ltzWaCXa9JXi4EYqNoVHVz8CwG2bNGAuBD90mLePaIA', '3', 'Susanne Musterfrau', 'en', ''),
+(4, 0, 1788779900, 1788779900, 0, 0, 0, 'default-user', '$argon2i$v=19$m=65536,t=16,p=1$bjJES2Z2V3Fjb0hoc1V3bg$Mey4+j5kOpiOsWor6uFAcDMIZNxTnE1+4X1egVIEJfM', '', 'Max Mustermann', 'en', '');
+
+INSERT INTO `be_groups` (`uid`, `pid`, `tstamp`, `crdate`, `deleted`, `hidden`, `tx_groupdelegation_delegateable`, `tx_groupdelegation_issubadmingroup`, `tx_groupdelegation_organisationunit`, `tx_groupdelegation_canactivate`, `title`, `file_permissions`, `groupMods`) VALUES
+(1, 0, 1788779900, 1788779900, 0, 0, 0, 0, 0, 0, 'group1-not-delegateable', 'readFolder,writeFolder,addFolder,renameFolder,moveFolder,deleteFolder,readFile,writeFile,addFile,renameFile,replaceFile,moveFile,copyFile,deleteFile', ''),
+(2, 0, 1788779936, 1788779936, 0, 0, 0, 0, 0, 0, 'group2-delegateable-1', 'readFolder,writeFolder,addFolder,renameFolder,moveFolder,deleteFolder,readFile,writeFile,addFile,renameFile,replaceFile,moveFile,copyFile,deleteFile', ''),
+(3, 0, 1788780164, 1788779943, 0, 0, 1, 1, 0, 1, 'group0-groupdelegation-subadmin', 'readFolder,writeFolder,addFolder,renameFolder,moveFolder,deleteFolder,readFile,writeFile,addFile,renameFile,replaceFile,moveFile,copyFile,deleteFile', 'site_groupdelegation');
+
+INSERT INTO `tx_groupdelegation_subadmin_begroups_mm` (`uid_local`, `uid_foreign`, `sorting`, `sorting_foreign`) VALUES
+(3, 2, 1, 0);
+EOF
