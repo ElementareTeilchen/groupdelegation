@@ -21,3 +21,7 @@ composer.lock
 .build
 .phplint.cache
 .php_cs.cache
+
+# In ddev generated and via web available documentation should be created manually,
+# see Documetation part @ https://groupdelegation.ddev.site/
+/Documentation-GENERATED-temp

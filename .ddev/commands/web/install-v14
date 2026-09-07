@@ -1,0 +1,68 @@
+#!/bin/bash
+
+VERSION=v14
+
+rm -rf /var/www/html/$VERSION/*
+mkdir -p /var/www/html/$VERSION/
+echo "{}" > /var/www/html/$VERSION/composer.json
+composer config extra.typo3/cms.web-dir public -d /var/www/html/$VERSION
+composer config repositories.$EXTENSION_KEY path ../../$EXTENSION_KEY -d /var/www/html/$VERSION
+composer config audit.block-insecure false -d /var/www/html/$VERSION
+composer config --no-plugins allow-plugins.typo3/cms-composer-installers true -d /var/www/html/$VERSION
+composer config --no-plugins allow-plugins.typo3/class-alias-loader true -d /var/www/html/$VERSION
+composer req typo3/minimal:'^14.3' \
+         typo3/cms-adminpanel:'^14.3' \
+         typo3/cms-belog:'^14.3' \
+         typo3/cms-beuser:'^14.3' \
+         typo3/cms-cli:'^3.1' \
+         typo3/cms-dashboard:'^14.3' \
+         typo3/cms-fluid-styled-content:'^14.3' \
+         typo3/cms-impexp:'^14.3' \
+         typo3/cms-info:'^14.3' \
+         typo3/cms-install:'^14.3' \
+         typo3/cms-lowlevel:'^14.3' \
+         typo3/cms-rte-ckeditor:'^14.3' \
+         typo3/cms-setup:'^14.3' \
+         typo3/cms-tstemplate:'^14.3' \
+         typo3/theme-camino:'^14.3' \
+         helhum/typo3-console:'^8.3' \
+         friendsoftypo3/visual-editor:'^1.4' \
+         $PACKAGE_NAME:'*@dev' \
+         --no-progress -n -d /var/www/html/$VERSION
+
+cd /var/www/html/$VERSION
+
+mysql -h db -u root -p"root" -e "CREATE DATABASE ${VERSION};"
+
+vendor/bin/typo3 setup -n --dbname=$VERSION --password=$TYPO3_DB_PASSWORD \
+                 --distribution="theme_camino" \
+                 --admin-user-password=$TYPO3_SETUP_ADMIN_PASSWORD
+
+vendor/bin/typo3 configuration:set 'BE/debug' 1
+vendor/bin/typo3 configuration:set 'FE/debug' 1
+vendor/bin/typo3 configuration:set 'SYS/devIPmask' '*'
+vendor/bin/typo3 configuration:set 'SYS/displayErrors' 1
+vendor/bin/typo3 configuration:set 'SYS/trustedHostsPattern' '.*.*'
+vendor/bin/typo3 configuration:set 'MAIL/transport' 'smtp'
+vendor/bin/typo3 configuration:set 'MAIL/transport_smtp_server' 'localhost:1025'
+vendor/bin/typo3 configuration:set 'MAIL/defaultMailFromAddress' 'admin@example.com'
+vendor/bin/typo3 configuration:set 'GFX/processor' 'ImageMagick'
+vendor/bin/typo3 configuration:set 'GFX/processor_path' '/usr/bin/'
+
+sed -i "/'deprecations'/,/^[[:space:]]*'disabled' => true,/s/'disabled' => true,/'disabled' => false,/" /var/www/html/$VERSION/config/system/settings.php
+sed -i 's#^base: /camino/$#base: /#' /var/www/html/$VERSION/config/sites/camino/config.yaml
+
+vendor/bin/typo3 configuration:set 'SYS/features/security.frontend.enforceContentSecurityPolicy' true
+
+cat <<EOL > "/var/www/html/$VERSION/config/sites/camino/csp.yaml"
+# see https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/ContentSecurityPolicy/Index.html
+# Inherits default site-unspecific frontend policy mutations (enabled per default)
+inheritDefault: true
+mutations:
+  - mode: extend
+    directive: 'style-src-elem'
+    sources:
+      - "'nonce-proxy'"
+EOL
+
+vendor/bin/typo3 cache:flush

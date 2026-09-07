@@ -1,0 +1,25 @@
+services:
+    web:
+        environment:
+            - EXTENSION_KEY=groupdelegation
+            - PACKAGE_NAME=elementareteilchen/groupdelegation
+
+            # TYPO3 config
+            - TYPO3_DB_DRIVER=mysqli
+            - TYPO3_DB_USERNAME=root
+            - TYPO3_DB_PASSWORD=root
+            - TYPO3_DB_HOST=db
+            - TYPO3_SETUP_ADMIN_EMAIL=admin@example.com
+            - TYPO3_SETUP_ADMIN_USERNAME=admin
+            - TYPO3_SETUP_ADMIN_PASSWORD=Password:joh316
+            - TYPO3_PROJECT_NAME=EXT:groupdelegation Dev Environment
+            - TYPO3_SERVER_TYPE=apache
+        volumes:
+            - type: bind
+              source: ../
+              target: /var/www/groupdelegation
+              consistency: cached
+            - v14-data:/var/www/html/v14
+volumes:
+    v14-data:
+        name: "${DDEV_SITENAME}-v14-data"
