@@ -25,3 +25,7 @@ composer.lock
 # In ddev generated and via web available documentation should be created manually,
 # see Documetation part @ https://groupdelegation.ddev.site/
 /Documentation-GENERATED-temp
+
+/.agents/commands
+/.agents/skills/openspec*
+/.junie
