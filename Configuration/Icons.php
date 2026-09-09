@@ -7,10 +7,6 @@ return [
         'provider' => SvgIconProvider::class,
         'source' => 'EXT:groupdelegation/Resources/Public/Images/moduleicon.svg',
     ],
-    'module-groupdelegation-v13' => [
-        'provider' => SvgIconProvider::class,
-        'source' => 'EXT:groupdelegation/Resources/Public/Images/moduleicon-v13.svg',
-    ],
     'extensions-groupdelegation-subadmin-group' => [
         'provider' => SvgIconProvider::class,
         'source' => 'EXT:groupdelegation/Resources/Public/Images/sub-admin-group-backend.svg',

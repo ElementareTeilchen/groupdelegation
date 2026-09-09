@@ -1,9 +1,6 @@
 <?php
 
 use ElementareTeilchen\Groupdelegation\Controller\BackendController;
-use TYPO3\CMS\Core\Information\Typo3Version;
-
-$typo3Version = (new Typo3Version())->getMajorVersion();
 
 /**
  * Definitions for modules provided by EXT:groupdelegation
@@ -12,9 +9,7 @@ return [
     'groupdelegation' => [
         'parent' => 'admin',
         'access' => 'user',
-        'iconIdentifier' => $typo3Version > 13
-            ? 'module-groupdelegation'
-            : 'module-groupdelegation-v13',
+        'iconIdentifier' =>'module-groupdelegation',
         'labels' => 'LLL:EXT:groupdelegation/Resources/Private/Language/locallang.xlf',
         'extensionName' => 'Groupdelegation',
         'controllerActions' => [
