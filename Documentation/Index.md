@@ -3,6 +3,7 @@
 Allows certain backend users to delegate group permissions to other backend users — without requiring a TYPO3 admin account.
 
 - [Installation](#installation)
+- [Upgrade](#upgrade)
 - [Extension Configuration](#extension-configuration)
 - [Site Configuration](#site-configuration)
 - [Using Groupdelegation as Sub Admin](#using-groupdelegation-as-sub-admin)
@@ -23,6 +24,21 @@ Originally developed by Sebastian Müller for Technische Universität München (
 
 ```bash
 composer require elementareteilchen/groupdelegation
+```
+
+---
+
+## Upgrade
+
+When upgrading from an older version of EXT:groupdelegation where the module was registered under Site Management (`site_groupdelegation`), the module identifier has changed to `groupdelegation` under the **Administration** main module.
+
+To migrate existing backend user and group permissions automatically:
+1. In the TYPO3 backend, go to **Admin Tools > Maintenance > Upgrade Wizards**.
+2. Run the wizard **EXT:groupdelegation: Migrate module permissions to new identifier**.
+
+Alternatively, run the upgrade wizard from the command line:
+```bash
+./vendor/bin/typo3 upgrade:run groupdelegation_moduleIdentifierMigration
 ```
 
 ---
@@ -72,7 +88,7 @@ Once enabled, three additional fields appear:
 
 ![Sub-admin group settings](Images/subadmin_group.png)
 
-The group also needs module access to **User tools** and **User tools > Groupdelegation**.
+The group also needs module access to **Administration > Groupdelegation**.
 
 ### 3. Assign Sub-Admin Group to a BE User
 
@@ -90,7 +106,7 @@ Open the BE user record, go to the **Extended** tab and assign one or more OUs. 
 
 ## Using Groupdelegation as Sub Admin
 
-Sub-admins see an additional **Groupdelegation** icon next to their user settings.
+Sub-admins see the **Groupdelegation** module under **Administration** in the main backend module menu.
 
 ![Sub-admin menu icon](Images/subadmin_menu.png)
 

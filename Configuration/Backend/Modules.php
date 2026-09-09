@@ -9,8 +9,8 @@ $typo3Version = (new Typo3Version())->getMajorVersion();
  * Definitions for modules provided by EXT:groupdelegation
  */
 return [
-    'site_groupdelegation' => [
-        'parent' => 'site',
+    'groupdelegation' => [
+        'parent' => 'admin',
         'access' => 'user',
         'iconIdentifier' => $typo3Version > 13
             ? 'module-groupdelegation'
