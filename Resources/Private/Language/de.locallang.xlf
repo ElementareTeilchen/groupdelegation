@@ -56,8 +56,12 @@
                 <target>Benutzer bearbeiten</target>
             </trans-unit>
             <trans-unit id="tx_groupdelegation.activationSettings">
-                <source>Activation Settings:</source>
-                <target>Aktivierungseinstellungen:</target>
+                <source>Activation Settings</source>
+                <target>Aktivierungseinstellungen</target>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.groupAssignment">
+                <source>Backend group assignment</source>
+                <target>Zuweisung der Backend-Gruppen</target>
             </trans-unit>
             <trans-unit id="tx_groupdelegation.close">
                 <source>Close</source>

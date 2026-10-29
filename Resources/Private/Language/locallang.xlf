@@ -43,7 +43,10 @@
                 <source>Edit user</source>
             </trans-unit>
             <trans-unit id="tx_groupdelegation.activationSettings">
-                <source>Activation Settings:</source>
+                <source>Activation Settings</source>
+            </trans-unit>
+            <trans-unit id="tx_groupdelegation.groupAssignment">
+                <source>Backend group assignment</source>
             </trans-unit>
             <trans-unit id="tx_groupdelegation.close">
                 <source>Close</source>

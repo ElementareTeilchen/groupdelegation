@@ -30,6 +30,7 @@ namespace ElementareTeilchen\Groupdelegation\Controller;
 use TYPO3\CMS\Backend\Attribute\AsController;
 use Psr\Http\Message\ResponseInterface;
 use ElementareTeilchen\Groupdelegation\Utility\GroupDelegationUtility;
+use TYPO3\CMS\Backend\Template\Enum\ModuleLayout;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
@@ -57,6 +58,7 @@ final class BackendController extends ActionController
     public function indexAction(): ResponseInterface
     {
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $moduleTemplate->setLayout(ModuleLayout::NORMAL);
 
         [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
@@ -97,6 +99,7 @@ final class BackendController extends ActionController
     public function editAction(int $userId): ResponseInterface
     {
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $moduleTemplate->setLayout(ModuleLayout::NORMAL);
         [$isSubAdmin, $canActivateUsers, $groupIdList] = GroupDelegationUtility::getSubadminStatus();
 
         $allowedToEditUser = false;

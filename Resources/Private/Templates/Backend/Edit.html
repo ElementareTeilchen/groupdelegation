@@ -1,59 +1,71 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en"
 	  xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
 	  xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+	  xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
 	  xmlns:gd="http://typo3.org/ns/ElementareTeilchen/Groupdelegation/ViewHelpers">
 
 <f:layout name="Module" />
 
 <f:section name="Content">
-    <f:asset.css identifier="gd-css" href="EXT:groupdelegation/Resources/Public/Css/backend.css"/>
-    <div id="groupdelegation-overlay">
-        <h1><f:translate key="tx_groupdelegation.title" /></h1>
+    <h1><f:translate key="tx_groupdelegation.title" /></h1>
 
-        <f:if condition="{isSubAdmin}">
-            <f:then>
-                <h3><be:avatar backendUser="{user.uid}" showIcon="1" /> {user.username} - {user.realName} [{user.uid}]</h3>
+    <f:if condition="{isSubAdmin}">
+        <f:then>
+            <h2 class="d-flex align-items-center gap-2"><be:avatar backendUser="{user.uid}" showIcon="1" /> <span>{user.username} - {user.realName} [{user.uid}]</span></h2>
 
-                <div class="groupdelegation-container">
-                        <f:form action="save" controller="Backend" name="editUser">
-                            <f:if condition="{canActivateUsers}">
-                                <h4><f:translate key="tx_groupdelegation.activationSettings" /></h4>
-                                <div>
-                                    <f:form.checkbox id="disable" name="disable" value="1" checked="{user.disable} == 1"></f:form.checkbox>
-                                    <label class="groupdelegation__disable" for="disable">
-                                        <f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_common.xlf:disable"/>
-                                    </label>
+            <f:form action="save" controller="Backend" name="editUser">
+                <f:form.hidden name="userId" value="{user.uid}"/>
+                <f:if condition="{canActivateUsers}">
+                    <fieldset class="form-section">
+                        <legend class="form-section-headline"><f:translate key="tx_groupdelegation.activationSettings" /></legend>
+                        <div class="form-check">
+                            <f:form.checkbox id="disable" name="disable" value="1" class="form-check-input" checked="{user.disable} == 1" />
+                            <label class="form-check-label" for="disable">
+                                <f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_common.xlf:disable"/>
+                            </label>
+                        </div>
+                        <f:if condition="{editableStartStopTime}">
+                            <div class="form-row mt-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="starttime"><f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.starttime"/></label>
+                                    <f:form.textfield id="starttime" name="starttime" type="date" class="form-control" value="{f:if(condition: user.starttime, then: '{user.starttime -> f:format.date( format: \'Y-m-d\' )}', else: '')}" placeholder="JJJJ-MM-DD" />
                                 </div>
-                                <f:if condition="{editableStartStopTime}">
-                                  <div class="groupdelegation__startstop">
-                                        <label for="starttime"><f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.starttime"/></label> <f:form.textfield name="starttime" type="date" value="{f:if(condition: user.starttime, then: '{user.starttime -> f:format.date( format: \'Y-m-d\' )}', else: '')}" placeholder="JJJJ-MM-DD" />
-                                        <label for="endtime"><f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.endtime"/></label> <f:form.textfield name="endtime" type="date" value="{f:if(condition: user.endtime, then: '{user.endtime -> f:format.date( format: \'Y-m-d\' )}', else: '')}" placeholder="JJJJ-MM-DD" />
-                                  </div>
-                                </f:if>
-                            </f:if>
-
-                            <f:form.hidden name="userId" value="{user.uid}"/>
-                            <div class="groupdelegation__delegateable">
-                                <h4><f:translate key="be_groups.tx_groupdelegation_delegatable" /></h4>
-                                <f:for each="{delegatableGroupsOfUser}" as="delgroup" key="delGroupId">
-                                    <f:form.checkbox name="groups[]" id="groups-{delGroupId}" title="groups" value="{delGroupId}" checked="{gd:InArray(needle:'{delGroupId}', haystack:'{usergroups}')} == true" />
-                                    <label for="groups-{delGroupId}"> {delgroup} </label>
-                                </f:for>
+                                <div class="form-group">
+                                    <label class="form-label" for="endtime"><f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.endtime"/></label>
+                                    <f:form.textfield id="endtime" name="endtime" type="date" class="form-control" value="{f:if(condition: user.endtime, then: '{user.endtime -> f:format.date( format: \'Y-m-d\' )}', else: '')}" placeholder="JJJJ-MM-DD" />
+                                </div>
                             </div>
-                            <f:link.action action="index" class="close-link">{f:translate(key:'tx_groupdelegation.close')}</f:link.action>
-                            <f:form.submit value="{f:translate(key:'tx_groupdelegation.save')}" />
+                        </f:if>
+                    </fieldset>
+                </f:if>
 
-                        </f:form>
+                <fieldset class="form-section">
+                    <legend class="form-section-headline"><f:translate key="tx_groupdelegation.groupAssignment" /></legend>
+                    <f:for each="{delegatableGroupsOfUser}" as="delgroup" key="delGroupId">
+                        <div class="form-check">
+                            <f:form.checkbox name="groups[]" id="groups-{delGroupId}" value="{delGroupId}" class="form-check-input" checked="{gd:InArray(needle:'{delGroupId}', haystack:'{usergroups}')} == true" />
+                            <label class="form-check-label" for="groups-{delGroupId}">{delgroup}</label>
+                        </div>
+                    </f:for>
+                </fieldset>
+
+                <div class="d-flex gap-2">
+                    <f:link.action action="index" class="btn btn-default">
+                        <core:icon identifier="actions-close" size="small" />
+                        {f:translate(key:'tx_groupdelegation.close')}
+                    </f:link.action>
+                    <f:form.button type="submit" class="btn btn-primary">
+                        <core:icon identifier="actions-document-save" size="small" />
+                        {f:translate(key:'tx_groupdelegation.save')}
+                    </f:form.button>
                 </div>
+            </f:form>
+        </f:then>
 
-            </f:then>
-
-            <f:else>
-                <h2><f:translate key="tx_groupdelegation.isNoMemberOfSubAdminGroup_Title" /></h2>
-                <f:translate key="tx_groupdelegation.isNoMemberOfSubAdminGroup_Message" />
-            </f:else>
-        </f:if>
-    </div>
-
+        <f:else>
+            <h2><f:translate key="tx_groupdelegation.isNoMemberOfSubAdminGroup_Title" /></h2>
+            <f:translate key="tx_groupdelegation.isNoMemberOfSubAdminGroup_Message" />
+        </f:else>
+    </f:if>
 </f:section>
 </html>
